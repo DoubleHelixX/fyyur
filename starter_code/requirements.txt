@@ -8,3 +8,5 @@ flask-moment
 flask-wtf
 flask script
 -U flask-cors
+colorama
+psycopg2
