@@ -893,7 +893,7 @@ def shows():
         "artist_image_link": shows[1].image_link,
         "start_time": str(shows[0].start_time)
       })
-    print(f'{Fore.BLUE} result Data: {resultData}')
+    #print(f'{Fore.BLUE} result Data: {resultData}')
   except expression as identifier:
     db.session.rollback()
     print(identifier)
