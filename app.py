@@ -21,12 +21,19 @@ from colorama import Fore , Style
 app = Flask(__name__)
 moment = Moment(app)
 app.config.from_object('config')
-db = SQLAlchemy(app)
+db = SQLAlchemy()
+db.app = app
+db.init_app(app)
+db.drop_all()
+db.create_all()
+#sdaasd
+
+
 
 # BOOTSTRAP DB migration command with migration file
-migration = m.migration(app, db)
+#migration = m.migration(app, db)
 
-# TODO: connect to a local postgresql database
+# DONE: connect to a local postgresql database
 
 #----------------------------------------------------------------------------#
 # Models.
@@ -79,7 +86,7 @@ class Artist(db.Model):
 
   
 
-# TODO Implement Show and Artist models, and complete all model relationships and properties, as a database migration.
+# DONE Implement Show and Artist models, and complete all model relationships and properties, as a database migration.
 class Show(db.Model):
   __tablename__ = 'shows'
   id = db.Column(db.Integer, primary_key=True)
@@ -137,7 +144,7 @@ def index():
 
 @app.route('/venues')
 def venues():
-  # TODO: replace with real venues data.
+  # DONE: replace with real venues data.
   #       num_shows should be aggregated based on number of upcoming shows per venue.
   error=False
   try:
@@ -356,7 +363,7 @@ def create_venue_submission():
     error=True
     db.session.rollback()
     print(sys.exc_info())
-    # TODO: on unsuccessful db insert, flash an error instead.
+    # DONE: on unsuccessful db insert, flash an error instead.
     flash('An error occurred. Venue ' + vName + ' could not be listed.')
     # see: http://flask.pocoo.org/docs/1.0/patterns/flashing/
   finally:
@@ -626,7 +633,7 @@ def edit_artist_submission(artist_id):
       #if the return value is 'y' or anything else other than a bool then set to true
       if (isinstance(aSeeking_venue, bool) == False):
         aSeeking_venue=True            
-    # TODO: insert form data as a new Venue record in the db, instead
+    # DONE: insert form data as a new Venue record in the db, instead
     currentArtistData = Artist.query.get(artist_id)
     if not currentArtistData.deleted:
       currentArtistData.name=aName
@@ -650,7 +657,7 @@ def edit_artist_submission(artist_id):
     error=True
     db.session.rollback()
     print(sys.exc_info())
-    # TODO: on unsuccessful db insert, flash an error instead.
+    # DONE: on unsuccessful db insert, flash an error instead.
     flash('An error occurred. Venue ' + aName + ' could not be edited.')
     # see: http://flask.pocoo.org/docs/1.0/patterns/flashing/
   finally:
@@ -744,7 +751,7 @@ def edit_venue_submission(venue_id):
       #if the return value is 'y' or anything else other than a bool then set to true
       if (isinstance(vSeeking_talent, bool) == False):
         vSeeking_talent=True            
-    # TODO: insert form data as a new Venue record in the db, instead
+    # DONE: insert form data as a new Venue record in the db, instead
     currentVenueData = Venue.query.get(venue_id)
     if not currentVenueData.deleted:
       currentVenueData.name=vName
@@ -759,7 +766,7 @@ def edit_venue_submission(venue_id):
       currentVenueData.seeking_description=vSeeking_description
       currentVenueData.website_link = vWebsite_link     
       # print('Printing new venue obj: ' ,newVenue , ' || ' ,newVenue.query.all())
-      # TODO: modify data to be the data object returned from db insertion
+      # DONE: modify data to be the data object returned from db insertion
       db.session.add(currentVenueData)
       # on successful db insert, flash success
       db.session.commit()
@@ -771,7 +778,7 @@ def edit_venue_submission(venue_id):
     error=True
     db.session.rollback()
     print(sys.exc_info())
-    # TODO: on unsuccessful db insert, flash an error instead.
+    # DONE: on unsuccessful db insert, flash an error instead.
     flash('An error occurred. Venue ' + vName + ' could not be edited.')
     # see: http://flask.pocoo.org/docs/1.0/patterns/flashing/
   finally:
@@ -817,7 +824,7 @@ def create_artist_submission():
       #if the return value is 'y' or anything else other than a bool then set to true
       if (isinstance(a_Seeking_venue, bool) == False):
         a_Seeking_venue=True
-    # TODO: insert form data as a new Venue record in the db, instead
+    # DONE: insert form data as a new Venue record in the db, instead
     print(f'{Fore.YELLOW} sdasfafdas' , a_Seeking_description)
     newArtist = Artist(name=a_Name, city=a_City , state=a_State, website_link=a_Website_link, phone=a_Phone, genres=a_Genres, image_link=a_Image_link, facebook_link=a_Facebook_link,seeking_venue=a_Seeking_venue, seeking_description=a_Seeking_description)
     
@@ -827,7 +834,7 @@ def create_artist_submission():
   except:
     db.session.rollback()
     print(sys.exc_info())
-    # TODO: on unsuccessful db insert, flash an error instead.
+    # DONE: on unsuccessful db insert, flash an error instead.
     flash('An error occurred. Venue ' + a_Name + ' could not be listed.')
     # see: http://flask.pocoo.org/docs/1.0/patterns/flashing/
   finally:
