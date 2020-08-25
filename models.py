@@ -15,13 +15,14 @@ from constants import (
 )
 import dateutil.parser
 import babel
-from manage import migration
 from sqlalchemy.orm import column_property
 from flask_sqlalchemy import SQLAlchemy
 import json
 from flask import Flask
 import pandas as pd
 from flask_moment import Moment
+#from manage import migration
+
 # ------------------------------------------------------------------------------------------------------#
 # *                        Configures DB connection
 # *                                  and
@@ -57,7 +58,7 @@ def setup_db(app, database_path=database_path):
     #  ?                               OPTIONAL
     #  ?                      Localize Migration setup
     #  ?----------------------------------------------------------------------------#
-    migration(app,db)
+    # migration(app,db)
 
 
 

@@ -938,15 +938,15 @@ def create_app(test_config=None):
 # * Create App object
 app = create_app()
 
-# *Local use:
-if __name__ == '__main__':
-  app.run(host = '127.0.0.1')
-
-# # *For Hyroku use:
-# #  run the app and specify port manually:
+# # *Local use:
 # if __name__ == '__main__':
-#     app.run(
-#         host='0.0.0.0',
-#         port=8080,
-#         debug=True
-#     )
+#   app.run(host = '127.0.0.1')
+
+# *For Hyroku use:
+#  run the app and specify port manually:
+if __name__ == '__main__':
+    app.run(
+        host='0.0.0.0',
+        port=8080,
+        debug=True
+    )
