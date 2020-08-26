@@ -47,4 +47,46 @@ Our tech stack will include:
       ├── layouts
       └── pages
 ```
+### What solutions does Fyyur provide?
 
+**Using Fyyur will give you the ability to search,create,delete,edit,view artist, venues, and or shows!**
+- Artist
+  - **` As an artist you can:`**
+    1. Click the Post an Artist button on the home page and create an artist with the forms provided .
+        - ![button](./pictures/artist_post_click.png)
+        - ![button](./pictures/artist_post.png)
+    2. Click the find an Artist button on the home page or in the header to get reidrected to the artist view.
+        - ![tab](./pictures/artist.png)
+    3. Search for an artist, typing in keywords.
+        - ![search](./pictures/artist_search.png)
+    4. Hover over an artist name to view the artist image url.
+        - ![hover](./pictures/artist_hover.png) 
+    5. Click an artist name to be redirected and view more information of the artist.
+        - ![click_artist](./pictures/artist_hover_click.png) 
+        - ![artist](./pictures/artist_artist.png) 
+    6. View artist past and or upcoming shows.
+        - ![view](./pictures/artist_artist_past_future.png)
+    7. Click on the edit button to edit current artist data.
+        - ![click_edit](./pictures/artist_artist_click_edit.png)    
+        - ![form](./pictures/artist_artist_edit.png) 
+    8. Click on the delete button to delete current artist data. Toast messages will pop up when successfully deleting, editing, creating, and or for errors handling.
+        - ![click_delete](./pictures/artist_artist_click_delete.png)    
+        - ![flash](./pictures/artist_artist_deleted.png)  
+    9. Post a show with a Venue.
+        - ![show_click](./pictures/show_post_click.png)\
+        - ![show_click](./pictures/show_post.png)   
+        
+- Venue
+    - **`As a Venue, you can: Repeat of Artist demostration`** 
+    
+- Shows
+  - **` As an user you can:`**
+    1. Click the find a show button on the home page or in the header .
+        - ![button](./pictures/show_click.png)
+        - ![button](./pictures/shows.png)
+    2. Click artist or venue links on the show box to view more info .
+        - ![button](./pictures/shows_artist.png)
+        - ![button](./pictures/shows_venue.png)
+    3. Deleted artist or venues will show on their respected pages displaying artist/venue deleted and or a deleted symbol .
+        - ![button](./pictures/shows_deleted.png)
+        
