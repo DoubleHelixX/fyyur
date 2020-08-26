@@ -320,7 +320,7 @@ def create_app(test_config=None):
     finally:
       db.session.close()
       if error: return redirect(url_for('show_venue', venue_id=venue_id))
-      else: return redirect(url_for('index'))
+      else: return render_template('pages/home.html')
     
     
   @app.route('/venues/<int:venue_id>/edit', methods=['GET'])
