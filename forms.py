@@ -3,7 +3,9 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField,BooleanField, IntegerField, validators,  SubmitField, DecimalField
 from wtforms.validators import DataRequired, AnyOf, URL, NumberRange
 
-
+#  *----------------------------------------------------------------------------#
+#  *                      WTForms implementation
+#  *----------------------------------------------------------------------------#
 class ShowForm(FlaskForm):
     artist_id = IntegerField(
         'artist_id', validators=[DataRequired()]
@@ -234,4 +236,4 @@ class ArtistForm(FlaskForm):
         'seeking_description', default='' #gave default values if left empty
     )
 
-# TODO IMPLEMENT NEW ARTIST FORM AND NEW SHOW FORM
+
