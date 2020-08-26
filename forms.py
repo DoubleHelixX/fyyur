@@ -190,7 +190,7 @@ class ArtistForm(FlaskForm):
             ('WY', 'WY'),
         ]
     )
-    phone =  IntegerField(
+    phone =  StringField(
         'phone', validators=[NumberRange(min=0, max=12, message='Field only accepts length of 12 ')]
     )
     image_link = StringField(
