@@ -62,7 +62,7 @@ Our tech stack will include:
     4. Hover over an artist name to view the artist image url.
         - ![hover](./pictures/artist_hover.png) 
     5. Click an artist name to be redirected and view more information of the artist.
-        - ![click_artist](./pictures/artist_hover_click.png) 
+        - ![click_artist](./pictures/artist_click.png) 
         - ![artist](./pictures/artist_artist.png) 
     6. View artist past and or upcoming shows.
         - ![view](./pictures/artist_artist_past_future.png)
@@ -73,7 +73,7 @@ Our tech stack will include:
         - ![click_delete](./pictures/artist_artist_click_delete.png)    
         - ![flash](./pictures/artist_artist_deleted.png)  
     9. Post a show with a Venue.
-        - ![show_click](./pictures/show_post_click.png)\
+        - ![show_click](./pictures/show_post_click.png)
         - ![show_click](./pictures/show_post.png)   
         
 - Venue
