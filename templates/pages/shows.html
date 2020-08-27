@@ -1,25 +1,72 @@
 {% extends 'layouts/main.html' %}
 {% block title %}Fyyur | Shows{% endblock %}
+
 {% block content %}
+
+<h2 class="monospace">{{ shows['upcoming']|length }} Upcoming {% if shows['upcoming']|length == 1 %}Show{% else %}Shows{% endif %}</h2>
 <div class="row shows">
-    {%for show in shows %}
+    {%for show in shows['upcoming']%}
     <div class="col-sm-4">
         <div class="tile tile-show">
             <img src="{{ show.artist_image_link }}" alt="Artist Image" />
             <h4>{{ show.start_time|datetime('full') }}</h4>
             {%if show.artist_deleted%}
-                <h5 style="color: black; ">{{ show.artist_name }}: &#9940;</h5>
+                <h5 style="color: black; ">&#9940; {{ show.artist_name }} &#9940;</h5>
             {%else%}
                 <h5><a href="/artists/{{ show.artist_id }}">{{ show.artist_name }}</a></h5>
             {%endif%}
             <p>playing at</p>
             {%if show.venue_deleted%}
-                <h5 style="color: black; ;">{{ show.venue_name }}: &#9940;</h5>
+                <h5 style="color: black;">&#9940; {{ show.venue_name }} &#9940;</h5>
             {%else%}
             <h5><a href="/venues/{{ show.venue_id }}">{{ show.venue_name }}</a></h5>
             {%endif%}
         </div>
     </div>
-    {% endfor %}
+    {% endfor %} 
 </div>
+
+<h2 class="h2_close " id="h2_past" >{{ shows['past']|length }} Past {% if shows['past']|length == 1 %}Show{% else %}Shows{% endif %} <button onclick="control_content_pane()" id="show_past" class="hide_content_color"><i class="fas fa-caret-right" id='fas_content'></i></button></h2>
+<div class="row shows" id= "pane_header_past" style="display: none;">
+    {%for show in shows['past']%}
+    <div class="col-sm-4">
+        <div class="tile tile-show">
+            <img src="{{ show.artist_image_link }}" alt="Artist Image" />
+            <h4>{{ show.start_time|datetime('full') }}</h4>
+            {%if show.artist_deleted%}
+                <h5 style="color: black; ">&#9940; {{ show.artist_name }} &#9940;</h5>
+            {%else%}
+                <h5><a href="/artists/{{ show.artist_id }}">{{ show.artist_name }}</a></h5>
+            {%endif%}
+            <p>playing at</p>
+            {%if show.venue_deleted%}
+                <h5 style="color: black; ">&#9940; {{ show.venue_name }} &#9940;</h5>
+            {%else%}
+            <h5><a href="/venues/{{ show.venue_id }}">{{ show.venue_name }}</a></h5>
+            {%endif%}
+        </div>
+    </div>
+    {% endfor %}    
+</div>
+
+<script>
+   function control_content_pane() {
+      var past_x = document.getElementById("pane_header_past");
+      var past_y = document.getElementById("fas_content");
+      var past_h2 = document.getElementById("h2_past");
+      var past_btn = document.getElementById("show_past");
+      if (past_x.style.display === "none") {
+        past_btn.className = 'show_content_color'
+        past_h2.className = 'h2_open'
+        past_y.className= 'fas fa-caret-down'; 
+        past_x.style.display = "block";
+      } else {
+        past_btn.className = 'hide_content_color'
+        past_h2.className = 'h2_close'
+        past_y.className= 'fas fa-caret-right'; 
+        past_x.style.display = "none";
+      }
+    }
+    </script>
 {% endblock %}
+

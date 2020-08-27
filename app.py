@@ -784,8 +784,11 @@ def create_app(test_config=None):
 
   @app.route('/shows')
   def shows():
+    error=None
     try:
-      resultData=[]
+      resultData={
+        'past': [],
+        'upcoming' : []}
       mockData=[{
       "venue_id": 1,
       "venue_name": "The Musical Hop",
@@ -826,25 +829,48 @@ def create_app(test_config=None):
       for shows in showsData:
         if shows[1].deleted and shows[2].deleted:
           shows[0].deleted= True
-        if not (shows[0].deleted ): 
-          resultData.append({
-          "venue_id": shows[2].id,
-          "venue_name": shows[2].name,
-          "venue_deleted": shows[2].deleted,
-          "artist_id": shows[1].id,
-          "artist_name": shows[1].name,
-          "artist_deleted": shows[1].deleted,
-          "artist_image_link": shows[1].image_link,
-          "start_time": str(shows[0].start_time)
-        })
+        
+        if not (shows[0].deleted):
+          if (shows[0].start_time <= datetime.today()): 
+            resultData['past'].append({
+            "venue_id": shows[2].id,
+            "venue_name": shows[2].name,
+            "venue_deleted": shows[2].deleted,
+            "artist_id": shows[1].id,
+            "artist_name": shows[1].name,
+            "artist_deleted": shows[1].deleted,
+            "artist_image_link": shows[1].image_link,
+            "start_time": str(shows[0].start_time)
+            })
+            print('<<<past', resultData['past'])
+          
+          elif (shows[0].start_time > datetime.today()): 
+            resultData['upcoming'].append({
+            "venue_id": shows[2].id,
+            "venue_name": shows[2].name,
+            "venue_deleted": shows[2].deleted,
+            "artist_id": shows[1].id,
+            "artist_name": shows[1].name,
+            "artist_deleted": shows[1].deleted,
+            "artist_image_link": shows[1].image_link,
+            "start_time": str(shows[0].start_time)
+            })
+            print('<<<upcoming', resultData['upcoming']) 
+          else: 
+            print('@ERROR', shows[0].start_time)
+            error=True
       #print(f'{Fore.BLUE} result Data: {resultData}')
     except expression as identifier:
       db.session.rollback()
+      error=True
       print(identifier)
       flash('An error occurred.')
     finally:
       db.session.close()
-      return render_template('pages/shows.html', shows=resultData)
+      if error:
+        return render_template('pages/home.html')
+      else:
+        return render_template('pages/shows.html', shows=resultData)
 
   @app.route('/shows/create')
   def create_shows():
