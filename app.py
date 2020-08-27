@@ -860,6 +860,26 @@ def create_app(test_config=None):
             print('@ERROR', shows[0].start_time)
             error=True
       #print(f'{Fore.BLUE} result Data: {resultData}')
+      genres_list=[ 
+            'Alternative', 
+            'Blues', 
+            'Classical', 
+            'Country', 
+            'Electronic',
+            'Folk', 
+            'Funk',
+            'Hip-Hop', 
+            'Heavy Metal',
+            'Instrumental', 
+            'Jazz', 
+            'Musical Theatre', 
+            'Pop', 
+            'Punk',
+            'R&B', 
+            'Reggae',
+            'Rock n Roll', 
+            'Soul', 
+            'Other']
     except expression as identifier:
       db.session.rollback()
       error=True
@@ -870,7 +890,7 @@ def create_app(test_config=None):
       if error:
         return render_template('pages/home.html')
       else:
-        return render_template('pages/shows.html', shows=resultData)
+        return render_template('pages/shows.html', shows=resultData, genres_list= genres_list)
 
   @app.route('/shows/create')
   def create_shows():
