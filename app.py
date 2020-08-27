@@ -786,9 +786,49 @@ def create_app(test_config=None):
   def shows():
     error=None
     try:
+      # * Checking if there is a JSON body
+      body=None
+      selected_genre =None
+      selected_pane = None
+      try:
+        body = request.get_json()
+      finally:
+        if not body:
+          selected_genre = 'All'
+          selected_pane = 'pane_header_upcoming'
+      if body:
+        selected_genre = body.get('selected_genre', 'All')
+        selected_pane  = body.get('selected_pane', 'pane_header_upcoming')
+        
       resultData={
         'past': [],
-        'upcoming' : []}
+        'upcoming' : [],
+        'genres': [
+                  'All',
+                  'Alternative', 
+                  'Blues', 
+                  'Classical', 
+                  'Country', 
+                  'Electronic',
+                  'Folk', 
+                  'Funk',
+                  'Hip-Hop', 
+                  'Heavy Metal',
+                  'Instrumental', 
+                  'Jazz', 
+                  'Musical Theatre', 
+                  'Pop', 
+                  'Punk',
+                  'R&B', 
+                  'Reggae',
+                  'Rock n Roll', 
+                  'Soul', 
+                  'Other'
+                  ],
+        'selected_genre': selected_genre,
+        'selected_pane': selected_pane 
+        }
+      #print('<<$', resultData['selected_pane'], resultData['selected_genre'])
       mockData=[{
       "venue_id": 1,
       "venue_name": "The Musical Hop",
@@ -855,31 +895,12 @@ def create_app(test_config=None):
             "artist_image_link": shows[1].image_link,
             "start_time": str(shows[0].start_time)
             })
-            print('<<<upcoming', resultData['upcoming']) 
+            #print('<<<upcoming', resultData['upcoming']) 
           else: 
-            print('@ERROR', shows[0].start_time)
+            #print('@ERROR', shows[0].start_time)
             error=True
       #print(f'{Fore.BLUE} result Data: {resultData}')
-      genres_list=[ 
-            'Alternative', 
-            'Blues', 
-            'Classical', 
-            'Country', 
-            'Electronic',
-            'Folk', 
-            'Funk',
-            'Hip-Hop', 
-            'Heavy Metal',
-            'Instrumental', 
-            'Jazz', 
-            'Musical Theatre', 
-            'Pop', 
-            'Punk',
-            'R&B', 
-            'Reggae',
-            'Rock n Roll', 
-            'Soul', 
-            'Other']
+    
     except expression as identifier:
       db.session.rollback()
       error=True
@@ -890,7 +911,7 @@ def create_app(test_config=None):
       if error:
         return render_template('pages/home.html')
       else:
-        return render_template('pages/shows.html', shows=resultData, genres_list= genres_list)
+        return render_template('pages/shows.html', shows=resultData)
 
   @app.route('/shows/create')
   def create_shows():
