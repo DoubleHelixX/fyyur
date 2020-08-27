@@ -15,7 +15,11 @@
             {% if (shows['selected_genre']|string() == genre|string())  and (shows['selected_pane']|string() == 'pane_header_upcoming')%}
                 <span class="genre_selected ">{{ genre }}</span>
             {%else%}
-                <span class="genre_unselected">{{ genre }}</span>
+            <form style="display: inline; margin: 0;" class="" method="GET" action="/">
+                <button type="submit" class="genre_unselected">
+                   {{ genre }}
+                </button>
+            </form>
             {%endif%}
         {% endfor %}
     </div>
@@ -53,7 +57,11 @@
         {% if (shows['selected_genre']|string() == genre|string())  and (shows['selected_pane']|string() == 'pane_header_past')%}
             <span class="genre_selected ">{{ genre }}</span>
         {%else%}
-            <span class="genre_unselected">{{ genre }}</span>
+        <form style="display: inline; margin: 0;" class="" method="GET" action="/">
+            <button type="submit" class="genre_unselected">
+               {{ genre }}
+            </button>
+        </form>
         {%endif%}
     {% endfor %}
 </div>
