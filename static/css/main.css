@@ -29,8 +29,8 @@ p.lead {
   margin-top: 30px;
 }
 ::selection {
-  background: #555;
-  color: #FFF;
+  /* FONT-WEIGHT: 100; */
+  color: #FFF8;
 }
 ::-moz-selection {
   background: #555;
@@ -437,6 +437,18 @@ h2.monospace {
 }
 .items img:hover {
   box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+}
+.featured{
+  -webkit-box-shadow: 6px 7px 13px 4px #000000; 
+  box-shadow: 6px 7px 13px 4px #000000;
+  /* -webkit-box-shadow:6px 7px 13px 4px #000000,  0 -1px 9px 0px rgb(255, 255, 255) , 0 0px 10px 0px  #ff0, 0 0px 20px 0px #ff8000 , 0 0px 20px 0px #F00; */
+  
+
+}
+.tinted{
+  -webkit-box-shadow: 0 8px 6px -6px gray;
+  -moz-box-shadow: 0 8px 6px -6px gray;
+       box-shadow: 0 8px 6px -6px gray;
 }
 
 .h2_open{
