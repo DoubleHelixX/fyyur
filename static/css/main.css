@@ -127,10 +127,13 @@ ul.items > li:hover h4 {
 .item h5 {
   margin-top: 0;
   margin-bottom: 5px;
+  
 }
 img {
   max-width: 100%;
   max-height: 500px;
+  border: #676767 solid 1px;
+ 
 }
 p {
   margin: 5px 0;
@@ -160,6 +163,93 @@ p > i {
 .genres {
   margin-bottom: 15px;
 }
+
+span.genre {
+  display: inline-block;
+  font-family: monospace;
+  padding: 4px 8px;
+  background: #f0f0f0;
+  margin: 0 5px 5px 0;
+  border-radius: 3px;
+  color: #676767;
+  font-size: 0.9em;
+  text-transform: uppercase;
+  border: solid 1px #eee;
+}
+
+.delete {
+  -webkit-appearance: none;
+  border-style: none;
+  border-left: 5px outset #a42c1c;
+  border-right: 5px outset #a42c1c;
+
+  border-radius: 38px 40px 40px 40px;
+  outline: none;
+  color: red;
+  cursor: pointer;
+  font-size: 25px;
+  background-color: white;
+  -webkit-transition: all 0.6s;
+  -moz-transition: all 0.6s;
+  transition: all 0.6s;
+  }
+
+  .delete:hover {
+    -webkit-appearance: none;
+    border-style: none;
+  
+    border: 2px groove #a42c1c;
+    border-radius: 38px 40px 40px 40px;
+    outline: none;
+    color: red;
+    cursor: pointer;
+    font-size: 25px;
+    background-color: white;
+    -webkit-transition: all 0.6s;
+    -moz-transition: all 0.6s;
+    transition: all 0.6s;
+    }
+
+  .edit  {
+  -webkit-appearance: none;
+  border-style: none;
+  border-left: 5px outset #1C6EA4;
+  border-right: 5px outset #1C6EA4;
+
+  border-radius: 38px 40px 40px 40px;
+  outline: none;
+  color: #0c3e5f;
+  cursor: pointer;
+  font-size: 22px;
+  background-color: white;
+  padding: .1599em .15em .175em .25em;
+  position: relative;
+  top: 0px;
+  right: 0px
+  -webkit-transition: all 0.6s;
+    -moz-transition: all 0.6s;
+    transition: all 0.6s;
+  }
+  .edit:hover{
+    -webkit-appearance: none;
+    border-style: none;
+   
+    border: 2px groove #1C6EA4;
+    border-radius: 38px 40px 40px 40px;
+    outline: none;
+    color: #040607;
+    cursor: pointer;
+    font-size: 22px;
+    background-color: white;
+    padding: .1599em .15em .175em .25em;
+    position: relative;
+    top: 0px;
+    right: 0px
+    
+    -webkit-transition: all 0.7s;
+    -moz-transition: all 0.7s;
+    transition: all 0.7s;
+  }
 span.genre_unselected {
   display: inline-block;
   font-family: monospace;
@@ -313,6 +403,9 @@ h2.monospace {
 .items li { display: inline;}
 .items .artist_hover_img  {position:absolute; display:none; z-index:99; }
 .items .venue_hover_img  {position:absolute; display:none; z-index:99; }
+.items h5{
+  color: #ff8000;
+}
 
 .items li:hover .artist_hover_img { 
   display:inline; 

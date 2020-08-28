@@ -2,42 +2,18 @@
 {% block title %}{{ artist.name }} | Artist{% endblock %}
 {% block content %}
 <style>
-	.artist-delete {
-		-webkit-appearance: none;
-		border-style: ridge;
-		outline: none;
-		color: red;
-		cursor: pointer;
-		font-size: 25px;
-		background-color: white;
-		
-	  }
 
-	  .artist-edit  {
-		-webkit-appearance: none;
-		border-style: ridge;
-		outline: none;
-		color: rgb(0, 0, 0);
-		cursor: pointer;
-		font-size: 22px;
-		background-color: white;
-		padding: .1599em .15em .175em .25em;
-		position: relative;
-		top: 0px;
-		right: 0px
-		
-	  }
 </style>
 		
 <div class="row">
 	<div class="col-sm-6">
-		<h1 class="monospace">
+		<h1 class="monospace" style= 'text-shadow: #ff8000 3px 3px 3px;'>
 			{{ artist.name }} 
 			<form style="display: inline; margin: 0;" onsubmit= "return confirm('Edit Artist?');" class="" method="GET" action="/artists/{{artist.id}}/edit">
-			<button class="artist-edit far fa-edit" id='editBtn' data-id="{{ artist.id }}"></button>
+			<button class="far fa-edit edit " id='editBtn' data-id="{{ artist.id }}"></button>
 			</form>
 			<form style="display: inline; margin: 0;" onsubmit= "return confirm('Delete Artist?');" class="" method="POST" action="/artists/{{artist.id}}/delete">
-			<button class="artist-delete" id='deleteBtn' data-id="{{ artist.id }}">&cross;</button>
+			<button class="delete" id='deleteBtn' data-id="{{ artist.id }}">&cross;</button>
 			</form>
 		</h1>
 		<p class="subtitle">
@@ -49,34 +25,36 @@
 			{% endfor %}
 		</div>
 		<p>
-			<i class="fas fa-globe-americas"></i> {{ artist.city }}, {{ artist.state }}
+			<i style = 'color: rgb(69, 141, 235)' class="fas fa-globe-americas"></i> {{ artist.city }}, {{ artist.state }}
 		</p>
 		<p>
-			<i class="fas fa-phone-alt"></i> {% if artist.phone %}{{ artist.phone }}{% else %}No Phone{% endif %}
+			<i style = 'color: rgb(69, 141, 235)' class="fas fa-phone-alt"></i> {% if artist.phone %}{{ artist.phone }}{% else %}No Phone{% endif %}
         </p>
         <p>
-			<i class="fas fa-link"></i> {% if artist.website %}<a href="{{ artist.website }}" target="_blank">{{ artist.website }}</a>{% else %}No Website{% endif %}
+			<i style = 'color: rgb(69, 141, 235)' class="fas fa-link"></i> {% if artist.website %}<a href="{{ artist.website }}" target="_blank">{{ artist.website }}</a>{% else %}No Website{% endif %}
 		</p>
 		<p>
-			<i class="fab fa-facebook-f"></i> {% if artist.facebook_link %}<a href="{{ artist.facebook_link }}" target="_blank">{{ artist.facebook_link }}</a>{% else %}No Facebook Link{% endif %}
+			<i  style = 'color: rgb(69, 141, 235)'class="fab fa-facebook-f"></i> {% if artist.facebook_link %}<a href="{{ artist.facebook_link }}" target="_blank">{{ artist.facebook_link }}</a>{% else %}No Facebook Link{% endif %}
         </p>
 		{% if artist.seeking_venue %}
 		<div class="seeking">
 			<p class="lead">Currently seeking performance venues</p>
 			{% if artist.seeking_description %}
 			<div class="description">
-				<i class="fas fa-quote-left"></i> {{ artist.seeking_description }} <i class="fas fa-quote-right"></i>
+				<i style = 'color: rgb(69, 141, 235)' class="fas fa-quote-left"></i> {{ artist.seeking_description }} <i style = 'color: rgb(69, 141, 235)' class="fas fa-quote-right"></i>
 			</div>
 			{% endif %}
 		</div>
 		{% else %}	
 		<p class="not-seeking">
-			<i class="fas fa-moon"></i> Not currently seeking performance venues
+			<i style = 'color: rgb(69, 141, 235)' class="fas fa-moon"></i> Not currently seeking performance venues
 		</p>
 		{% endif %}
 	</div>
-	<div class="col-sm-6">
-		<img src="{{ artist.image_link }}" alt="Venue Image" />
+	<div class="col-sm-6 items">
+		<!-- <img src="{{ artist.image_link }}" alt="Venue Image" /> -->
+			<img style=' box-shadow: #ff8000 3px 3px 3px;' src= "{{ artist.image_link }}" alt="artist_image"/>
+		
 	</div>
 </div>
 <section>

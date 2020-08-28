@@ -2,14 +2,15 @@
 {% block title %}Fyyur | Venues{% endblock %}
 {% block content %}
 
-{% for venue in venues %}
+
+	<ul class="items">
+		{% for venue in venues %}
 	{%if venue.city and venue.state %}
 			<h5> {{ venue.city }} , {{ venue.state }} </h5>
 		{%endif%}
-	<ul class="items">
 		<li>
 			<a href="/venues/{{ venue.id }}">
-				<i class="fas fa-music"></i>
+				<i style = 'color: rgb(69, 141, 235)' class="fas fa-music"></i>
 				<div class="item">
 					<h4>{{ venue.name }}</h4>
 				</div>
