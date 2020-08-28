@@ -7,15 +7,15 @@
 <h2 class="h2_open " id="h2_upcoming">{{ shows['upcoming']|length }} Upcoming {% if shows['upcoming']|length == 1 %}Show{% else %}Shows{% endif %} <button onclick="control_content_pane('h2_upcoming', 'show_upcoming', 'pane_header_upcoming', 'fas_content_upcoming')" id="show_upcoming" class="show_content_color"><i class="fas fa-caret-down" id='fas_content_upcoming'></i></button></h2>
 <div id= "pane_header_upcoming" style="display: block;">
 {% else %} 
-    <h2 class="h2_close " id="h2_upcoming">{{ shows['upcoming']|length }} Upcoming {% if shows['upcoming']|length == 1 %}Show{% else %}Shows{% endif %} <button onclick="control_content_pane('h2_upcoming', 'show_upcoming', 'pane_header_upcoming', 'fas_content_upcoming')" id="show_upcoming" class="hide_content_color"><i class="fas fa-caret-down" id='fas_content_upcoming'></i></button></h2>
-    <div id= "pane_header_upcoming" style="display: none;"></div>
+    <h2 class="h2_close " id="h2_upcoming">{{ shows['upcoming']|length }} Upcoming {% if shows['upcoming']|length == 1 %}Show{% else %}Shows{% endif %} <button onclick="control_content_pane('h2_upcoming', 'show_upcoming', 'pane_header_upcoming', 'fas_content_upcoming')" id="show_upcoming" class="hide_content_color"><i class="fas fa-caret-right" id='fas_content_upcoming'></i></button></h2>
+    <div id= "pane_header_upcoming" style="display: none;">
 {% endif %}
     <div class="genres" >
         {% for genre in shows['genres'] %}
             {% if (shows['selected_genre']|string() == genre|string())  and (shows['selected_pane']|string() == 'pane_header_upcoming')%}
                 <span class="genre_selected ">{{ genre }}</span>
             {%else%}
-            <form style="display: inline; margin: 0;" class="" method="GET" action="/">
+            <form style="display: inline; margin: 0;" class="" method="GET" action="/shows/{{genre}}/pane_header_upcoming">
                 <button type="submit" class="genre_unselected">
                    {{ genre }}
                 </button>
@@ -45,11 +45,12 @@
         {% endfor %} 
     </div>
 </div>
+
 {% if (shows['selected_pane']|string()) == 'pane_header_past' %}
-<h2 class="h2_open " id="h2_past" >{{ shows['past']|length }} Past {% if shows['past']|length == 1 %}Show{% else %}Shows{% endif %} <button onclick="control_content_pane('h2_past','show_past','pane_header_past','fas_content_past')" id="show_past" class="show_content_color"><i class="fas fa-caret-down" id='fas_content_past'></i></button></h2>
+<h2 class="h2_open" id="h2_past" >{{ shows['past']|length }} Past {% if shows['past']|length == 1 %}Show{% else %}Shows{% endif %} <button onclick="control_content_pane('h2_past','show_past','pane_header_past','fas_content_past')" id="show_past" class="show_content_color"><i class="fas fa-caret-down" id='fas_content_past'></i></button></h2>
 <div id= "pane_header_past" style="display: block;">
 {% else %} 
-<h2 class="h2_close " id="h2_past" >{{ shows['past']|length }} Past {% if shows['past']|length == 1 %}Show{% else %}Shows{% endif %} <button onclick="control_content_pane('h2_past','show_past','pane_header_past','fas_content_past')" id="show_past" class="hide_content_color"><i class="fas fa-caret-right" id='fas_content_past'></i></button></h2>
+<h2 class="h2_close" id="h2_past" >{{ shows['past']|length }} Past {% if shows['past']|length == 1 %}Show{% else %}Shows{% endif %} <button onclick="control_content_pane('h2_past','show_past','pane_header_past','fas_content_past')" id="show_past" class="hide_content_color"><i class="fas fa-caret-right" id='fas_content_past'></i></button></h2>
 <div id= "pane_header_past" style="display: none;">
 {% endif %}
 <div class="genres" >
@@ -57,7 +58,7 @@
         {% if (shows['selected_genre']|string() == genre|string())  and (shows['selected_pane']|string() == 'pane_header_past')%}
             <span class="genre_selected ">{{ genre }}</span>
         {%else%}
-        <form style="display: inline; margin: 0;" class="" method="GET" action="/">
+        <form style="display: inline; margin: 0;" class="" method="GET" action="/shows/{{genre}}/pane_header_past">
             <button type="submit" class="genre_unselected">
                {{ genre }}
             </button>

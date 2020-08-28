@@ -75,7 +75,7 @@
                   aria-label="Search">
               </form>
               {% endif %}
-              {% if (request.endpoint == 'shows') or
+              {% if ('shows in request.endpoint') or
               (request.endpoint == 'show')%} 
             <form class="search" method="post" action="/shows/search">
               <input class="form-control"
@@ -90,7 +90,7 @@
           <ul class="nav navbar-nav">
             <li {% if request.endpoint == 'venues' %} class="active" {% endif %}><a href="{{ url_for('venues') }}">Venues</a></li>
             <li {% if request.endpoint == 'artists' %} class="active" {% endif %}><a href="{{ url_for('artists') }}">Artists</a></li>
-            <li {% if request.endpoint == 'shows' %} class="active" {% endif %}><a href="{{ url_for('shows') }}">Shows</a></li>
+            <li {% if 'shows' in request.endpoint  or  request.endpoint == 'shows' %} class="active" {% endif %}><a href="{{ url_for('shows') }}">Shows</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>

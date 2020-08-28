@@ -781,9 +781,119 @@ def create_app(test_config=None):
   #  *----------------------------------------------------------------------------#
   #  *                              Shows Endpoints
   #  *----------------------------------------------------------------------------#
-
+  @app.route('/shows/<string:selected_genre>/<string:selected_pane>')
+  def shows_specific(selected_genre='All', selected_pane = 'pane_header_upcoming'):
+    error=None
+    search=True
+    try:
+      resultData={
+        'past': [],
+        'upcoming' : [],
+        'genres': [
+                  'All',
+                  'Alternative', 
+                  'Blues', 
+                  'Classical', 
+                  'Country', 
+                  'Electronic',
+                  'Folk', 
+                  'Funk',
+                  'Hip-Hop', 
+                  'Heavy Metal',
+                  'Instrumental', 
+                  'Jazz', 
+                  'Musical Theatre', 
+                  'Pop', 
+                  'Punk',
+                  'R&B', 
+                  'Reggae',
+                  'Rock n Roll', 
+                  'Soul', 
+                  'Other'
+                  ],
+        'selected_genre': selected_genre.capitalize(),
+        'selected_pane': selected_pane 
+        }
+      #print('<<$', resultData['selected_pane'], resultData['selected_genre'])
+      showsData = db.session.query(Show, Artist, Venue).filter(Show.artist_id == Artist.id).filter(Venue.id == Show.venue_id).order_by(Show.start_time.desc()).all()
+    
+      for shows in showsData:
+        if shows[1].deleted and shows[2].deleted:
+          shows[0].deleted= True
+        
+        if not (shows[0].deleted):
+          if selected_genre.capitalize() == 'All':
+            print('<@ehh', selected_genre.capitalize() == 'All')
+            
+            if (shows[0].start_time <= datetime.today()): 
+              resultData['past'].append({
+              "venue_id": shows[2].id,
+              "venue_name": shows[2].name,
+              "venue_deleted": shows[2].deleted,
+              "artist_id": shows[1].id,
+              "artist_name": shows[1].name,
+              "artist_deleted": shows[1].deleted,
+              "artist_image_link": shows[1].image_link,
+              "start_time": str(shows[0].start_time)
+              })
+            elif (shows[0].start_time > datetime.today()): 
+              resultData['upcoming'].append({
+              "venue_id": shows[2].id,
+              "venue_name": shows[2].name,
+              "venue_deleted": shows[2].deleted,
+              "artist_id": shows[1].id,
+              "artist_name": shows[1].name,
+              "artist_deleted": shows[1].deleted,
+              "artist_image_link": shows[1].image_link,
+              "start_time": str(shows[0].start_time)
+              })
+            else:
+              error=True
+          elif (selected_genre.capitalize() in shows[2].genres or selected_genre.capitalize() in shows[1].genres ):
+            print('<#ehh', (selected_genre.capitalize() in shows[2].genres))
+            search=True
+            if (shows[0].start_time <= datetime.today()):
+              resultData['past'].append({
+              "venue_id": shows[2].id,
+              "venue_name": shows[2].name,
+              "venue_deleted": shows[2].deleted,
+              "artist_id": shows[1].id,
+              "artist_name": shows[1].name,
+              "artist_deleted": shows[1].deleted,
+              "artist_image_link": shows[1].image_link,
+              "start_time": str(shows[0].start_time)
+              })
+            elif (shows[0].start_time > datetime.today()): 
+              resultData['upcoming'].append({
+              "venue_id": shows[2].id,
+              "venue_name": shows[2].name,
+              "venue_deleted": shows[2].deleted,
+              "artist_id": shows[1].id,
+              "artist_name": shows[1].name,
+              "artist_deleted": shows[1].deleted,
+              "artist_image_link": shows[1].image_link,
+              "start_time": str(shows[0].start_time)
+              })
+            else:
+              error=True
+          else:
+            search=False
+    except expression as identifier:
+      db.session.rollback()
+      error=True
+      print(identifier)
+      flash('An error occurred.')
+    finally:
+      db.session.close()
+      if not search:
+        flash('No results found. Try a different genre.')
+      if error:
+        return render_template('pages/home.html')
+      else:
+        return render_template('pages/shows.html', shows=resultData)
+      
   @app.route('/shows')
-  def shows():
+  def shows(data=None):
     error=None
     try:
       # * Checking if there is a JSON body
@@ -969,6 +1079,9 @@ def create_app(test_config=None):
         return redirect(url_for('create_shows')) 
       else:
         return redirect(url_for('index')) 
+      
+      
+      
       
   #  *----------------------------------------------------------------------------#
   #  *                              Error Handlers
