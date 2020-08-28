@@ -823,7 +823,7 @@ def create_app(test_config=None):
         
         if not (shows[0].deleted):
           if selected_genre.capitalize() == 'All':
-            print('<@ehh', selected_genre.capitalize() == 'All')
+            #print('<@ehh', selected_genre.capitalize() == 'All')
             
             if (shows[0].start_time <= datetime.today()): 
               resultData['past'].append({
@@ -849,33 +849,59 @@ def create_app(test_config=None):
               })
             else:
               error=True
-          elif (selected_genre.capitalize() in shows[2].genres or selected_genre.capitalize() in shows[1].genres ):
-            print('<#ehh', (selected_genre.capitalize() in shows[2].genres))
-            search=True
+          elif (selected_pane == 'pane_header_upcoming'):
+            
             if (shows[0].start_time <= datetime.today()):
-              resultData['past'].append({
-              "venue_id": shows[2].id,
-              "venue_name": shows[2].name,
-              "venue_deleted": shows[2].deleted,
-              "artist_id": shows[1].id,
-              "artist_name": shows[1].name,
-              "artist_deleted": shows[1].deleted,
-              "artist_image_link": shows[1].image_link,
-              "start_time": str(shows[0].start_time)
-              })
-            elif (shows[0].start_time > datetime.today()): 
-              resultData['upcoming'].append({
-              "venue_id": shows[2].id,
-              "venue_name": shows[2].name,
-              "venue_deleted": shows[2].deleted,
-              "artist_id": shows[1].id,
-              "artist_name": shows[1].name,
-              "artist_deleted": shows[1].deleted,
-              "artist_image_link": shows[1].image_link,
-              "start_time": str(shows[0].start_time)
-              })
-            else:
-              error=True
+                resultData['past'].append({
+                "venue_id": shows[2].id,
+                "venue_name": shows[2].name,
+                "venue_deleted": shows[2].deleted,
+                "artist_id": shows[1].id,
+                "artist_name": shows[1].name,
+                "artist_deleted": shows[1].deleted,
+                "artist_image_link": shows[1].image_link,
+                "start_time": str(shows[0].start_time)
+                })
+            elif ((selected_genre.capitalize() in shows[2].genres or selected_genre.capitalize() in shows[1].genres)):
+              #print('<#ehh', (selected_genre.capitalize() in shows[2].genres))
+              search=True
+              if  (shows[0].start_time > datetime.today()): 
+                resultData['upcoming'].append({
+                "venue_id": shows[2].id,
+                "venue_name": shows[2].name,
+                "venue_deleted": shows[2].deleted,
+                "artist_id": shows[1].id,
+                "artist_name": shows[1].name,
+                "artist_deleted": shows[1].deleted,
+                "artist_image_link": shows[1].image_link,
+                "start_time": str(shows[0].start_time)
+                })
+          elif (selected_pane == 'pane_header_past'):
+            if (shows[0].start_time > datetime.today()):
+                resultData['upcoming'].append({
+                "venue_id": shows[2].id,
+                "venue_name": shows[2].name,
+                "venue_deleted": shows[2].deleted,
+                "artist_id": shows[1].id,
+                "artist_name": shows[1].name,
+                "artist_deleted": shows[1].deleted,
+                "artist_image_link": shows[1].image_link,
+                "start_time": str(shows[0].start_time)
+                }) 
+            elif ((selected_genre.capitalize() in shows[2].genres or selected_genre.capitalize() in shows[1].genres)):
+              #print('<#ehh', (selected_genre.capitalize() in shows[2].genres))
+              search=True
+              if  (shows[0].start_time <= datetime.today()): 
+                resultData['past'].append({
+                "venue_id": shows[2].id,
+                "venue_name": shows[2].name,
+                "venue_deleted": shows[2].deleted,
+                "artist_id": shows[1].id,
+                "artist_name": shows[1].name,
+                "artist_deleted": shows[1].deleted,
+                "artist_image_link": shows[1].image_link,
+                "start_time": str(shows[0].start_time)
+                }) 
           else:
             search=False
     except expression as identifier:
