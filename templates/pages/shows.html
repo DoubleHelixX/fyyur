@@ -1,19 +1,63 @@
 {% extends 'layouts/main.html' %} {% block title %}Fyyur | Shows{% endblock %}
 {% block content %} 
+
+
+
+
+<h2 class="h2_open" id="h2_featured" style="text-align: center;">
+  <i class="fas fa-caret-down show_content_color" id="fas_content_featured"></i>
+
+   Featured Shows 
+   <i class="fas fa-caret-down show_content_color" id="fas_content_featured"></i>
+
+</h2>
+<div id="pane_header_featured" style="display: block">
+    <div class="row shows">
+      {%for show in shows['upcoming'] %}
+      {%if loop.index < 7 %}
+      <div class="col-sm-4">
+        <div class="tile tile-show">
+          <img src="{{ show.artist_image_link }}" alt="Artist Image" />
+          <h4>{{ show.start_time|datetime('full') }}</h4>
+          {%if show.artist_deleted%}
+          <h5 style="color: black">&#9940; {{ show.artist_name }} &#9940;</h5>
+          {%else%}
+          <h5>
+            <a href="/artists/{{ show.artist_id }}">{{ show.artist_name }}</a>
+          </h5>
+          {%endif%}
+          <p>playing at</p>
+          {%if show.venue_deleted%}
+          <h5 style="color: black">&#9940; {{ show.venue_name }} &#9940;</h5>
+          {%else%}
+          <h5>
+            <a href="/venues/{{ show.venue_id }}">{{ show.venue_name }}</a>
+          </h5>
+          {%endif%}
+        </div>
+      </div>
+      {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+
+
+
+
 {% if ((shows['selected_pane']|string()) == 'pane_header_upcoming')  or ((shows['selected_pane']|string()) == 'All') %}
-<h2 class="h2_open" id="h2_upcoming">
+<h2 class="h2_open" id="h2_upcoming" style="padding-top: 3rem;">
   {{ shows['upcoming']|length }} Upcoming {% if shows['upcoming']|length == 1%}Show{% else %}Shows{% endif %}
-  <button
+  <button 
     onclick="control_content_pane('h2_upcoming', 'show_upcoming', 'pane_header_upcoming', 'fas_content_upcoming')"
     id="show_upcoming"
-    class="show_content_color"
+    class="show_content_color h2_open"
   >
     <i class="fas fa-caret-down" id="fas_content_upcoming"></i>
   </button>
 </h2>
 <div id="pane_header_upcoming" style="display: block">
   {% else %}
-  <h2 class="h2_close" id="h2_upcoming">
+  <h2 class="h2_close" id="h2_upcoming" style="padding-top: 3rem;">
     {{ shows['upcoming']|length }} Upcoming {% if shows['upcoming']|length == 1
     %}Show{% else %}Shows{% endif %}
     <button
@@ -92,20 +136,20 @@
   </div>
 
   {% if ((shows['selected_pane']|string()) == 'pane_header_past')  or ((shows['selected_pane']|string()) == 'All')%}
-  <h2 class="h2_open" id="h2_past">
+  <h2 class="h2_open" id="h2_past" style="padding-top: 3rem;">
     {{ shows['past']|length }} Past {% if shows['past']|length == 1 %}Show{%
     else %}Shows{% endif %}
     <button
       onclick="control_content_pane('h2_past','show_past','pane_header_past','fas_content_past')"
       id="show_past"
-      class="show_content_color"
+      class="show_content_color h2_open"
     >
       <i class="fas fa-caret-down" id="fas_content_past"></i>
     </button>
   </h2>
   <div id="pane_header_past" style="display: block">
     {% else %}
-    <h2 class="h2_close" id="h2_past">
+    <h2 class="h2_close" id="h2_past"style="padding-top: 3rem;" >
       {{ shows['past']|length }} Past {% if shows['past']|length == 1 %}Show{%
       else %}Shows{% endif %}
       <button
@@ -182,6 +226,8 @@
       </div>
     </div>
 
+
+
     <script>
       function control_content_pane(element_id, btn_id, pane_id, fas_id) {
         var past_x = document.getElementById(pane_id);
@@ -189,8 +235,8 @@
         var past_h2 = document.getElementById(element_id);
         var past_btn = document.getElementById(btn_id);
         if (past_x.style.display === "none") {
-          past_btn.className = "show_content_color";
-          past_h2.className = "h2_open";
+          past_btn.className = "show_content_color h2_open";
+          past_h2.className = "h2_open ";
           past_y.className = "fas fa-caret-down";
           past_x.style.display = "block";
         } else {

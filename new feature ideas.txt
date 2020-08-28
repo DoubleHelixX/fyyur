@@ -21,4 +21,6 @@ featured for 1 hour, 6 hours, 24hours check boxs with monkey icons
 show id
 error message: create show first
 
+add pagination for show views up to 9 on one page
+
 I FINSHED :D for now.
