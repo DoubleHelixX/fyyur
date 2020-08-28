@@ -182,7 +182,6 @@ span.genre {
   border-style: none;
   border-left: 5px outset #a42c1c;
   border-right: 5px outset #a42c1c;
-
   border-radius: 38px 40px 40px 40px;
   outline: none;
   color: red;
@@ -197,7 +196,6 @@ span.genre {
   .delete:hover {
     -webkit-appearance: none;
     border-style: none;
-  
     border: 2px groove #a42c1c;
     border-radius: 38px 40px 40px 40px;
     outline: none;
@@ -227,29 +225,30 @@ span.genre {
   top: 0px;
   right: 0px
   -webkit-transition: all 0.6s;
-    -moz-transition: all 0.6s;
-    transition: all 0.6s;
+  -moz-transition: all 0.6s;
+  transition: all 0.6s;
   }
+
   .edit:hover{
-    -webkit-appearance: none;
-    border-style: none;
-   
-    border: 2px groove #1C6EA4;
-    border-radius: 38px 40px 40px 40px;
-    outline: none;
-    color: #040607;
-    cursor: pointer;
-    font-size: 22px;
-    background-color: white;
-    padding: .1599em .15em .175em .25em;
-    position: relative;
-    top: 0px;
-    right: 0px
-    
-    -webkit-transition: all 0.7s;
-    -moz-transition: all 0.7s;
-    transition: all 0.7s;
+  -webkit-appearance: none;
+  border-style: none;
+  
+  border: 2px groove #1C6EA4;
+  border-radius: 38px 40px 40px 40px;
+  outline: none;
+  color: #040607;
+  cursor: pointer;
+  font-size: 22px;
+  background-color: white;
+  padding: .1599em .15em .175em .25em;
+  position: relative;
+  top: 0px;
+  right: 0px
+  -webkit-transition: all 0.7s;
+  -moz-transition: all 0.7s;
+  transition: all 0.7s;
   }
+
 span.genre_unselected {
   display: inline-block;
   font-family: monospace;

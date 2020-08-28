@@ -1,103 +1,147 @@
-{% extends 'layouts/main.html' %}
-{% block title %}Venue Search{% endblock %}
-{% block content %}
-<style>
+{% extends 'layouts/main.html' %} {% block title %}Venue Search{% endblock %} {%
+block content %}
+<style></style>
 
-</style>
-		
 <div class="row">
-	<div class="col-sm-6">
-		<h1 class="monospace">
-			{{ venue.name }} 
-			<form style="display: inline; margin: 0;" onsubmit= "return confirm('Edit the Venue?');" class="" method="GET" action="/venues/{{venue.id}}/edit">
-			<button type="submit" class="edit far fa-edit" id='editBtn' data-id="{{ venue.id }}"></button>
-			</form>
-			<form style="display: inline; margin: 0;" onsubmit= "return confirm('Delete the Venue?');" class="" method="POST" action="/venues/{{venue.id}}/delete">
-			<button type="submit" class="delete" id='deleteBtn' data-id="{{ venue.id }}">&cross;</button>  
-			</form>
-			</h1>
-		<p class="subtitle">
-			ID: {{ venue.id }}
-		</p>
-		<div class="genres">
-			{% for genre in venue.genres %}
-			<span class="genre">{{ genre }}</span>
-			{% endfor %}
-		</div>
-		<p>
-			<i style = 'color: rgb(69, 141, 235)' class="fas fa-globe-americas"></i> {{ venue.city }}, {{ venue.state }}
-		</p>
-		<p>
-			<i style = 'color: rgb(69, 141, 235)' class="fas fa-map-marker"></i> {% if venue.address %}{{ venue.address }}{% else %}No Address{% endif %}
-		</p>
-		<p>
-			<i style = 'color: rgb(69, 141, 235)' class="fas fa-phone-alt"></i> {% if venue.phone %}{{ venue.phone }}{% else %}No Phone{% endif %}
-		</p>
-		<p>
-			<i style = 'color: rgb(69, 141, 235)' class="fas fa-link"></i> {% if venue.website %}<a href="{{ venue.website }}" target="_blank">{{ venue.website }}</a>{% else %}No Website{% endif %}
-		</p>
-		<p>
-			<i style = 'color: rgb(69, 141, 235)' class="fab fa-facebook-f"></i> {% if venue.facebook_link %}<a href="{{ venue.facebook_link }}" target="_blank">{{ venue.facebook_link }}</a>{% else %}No Facebook Link{% endif %}
-		</p>
-		{% if venue.seeking_talent %}
-		<div class="seeking">
-			<p class="lead">Currently seeking talent</p>
-			{% if venue.seeking_description %}
-			<div class="description">
-				<i style = 'color: rgb(69, 141, 235)' class="fas fa-quote-left"></i> {{ venue.seeking_description }} <i style = 'color: rgb(69, 141, 235)' class="fas fa-quote-right"></i>
-			</div>
-			{% endif %}
-		</div>
-		{% else %}	
-		<p class="not-seeking">
-			<i style = 'color: rgb(69, 141, 235)' class="fas fa-moon"></i> Not currently seeking talent
-		</p>
-		{% endif %}
-	</div>
-	<div class="col-sm-6 items">
-		<img  style='box-shadow: #ff8000 3px 3px 3px;' src="{{ venue.image_link }}" alt="Venue Image" />
-	</div>
+  <div class="col-sm-6">
+    <h1 class="monospace">
+      {{ venue.name }}
+      <form
+        style="display: inline; margin: 0"
+        onsubmit="return confirm('Edit the Venue?');"
+        class=""
+        method="GET"
+        action="/venues/{{venue.id}}/edit"
+      >
+        <button
+          type="submit"
+          class="edit far fa-edit"
+          id="editBtn"
+          data-id="{{ venue.id }}"
+        ></button>
+      </form>
+      <form
+        style="display: inline; margin: 0"
+        onsubmit="return confirm('Delete the Venue?');"
+        class=""
+        method="POST"
+        action="/venues/{{venue.id}}/delete"
+      >
+        <button
+          type="submit"
+          class="delete"
+          id="deleteBtn"
+          data-id="{{ venue.id }}"
+        >
+          &cross;
+        </button>
+      </form>
+    </h1>
+    <p class="subtitle">ID: {{ venue.id }}</p>
+    <div class="genres">
+      {% for genre in venue.genres %}
+      <span class="genre">{{ genre }}</span>
+      {% endfor %}
+    </div>
+    <p>
+      <i style="color: rgb(69, 141, 235)" class="fas fa-globe-americas"></i> {{
+      venue.city }}, {{ venue.state }}
+    </p>
+    <p>
+      <i style="color: rgb(69, 141, 235)" class="fas fa-map-marker"></i> {% if
+      venue.address %}{{ venue.address }}{% else %}No Address{% endif %}
+    </p>
+    <p>
+      <i style="color: rgb(69, 141, 235)" class="fas fa-phone-alt"></i> {% if
+      venue.phone %}{{ venue.phone }}{% else %}No Phone{% endif %}
+    </p>
+    <p>
+      <i style="color: rgb(69, 141, 235)" class="fas fa-link"></i> {% if
+      venue.website %}<a href="{{ venue.website }}" target="_blank"
+        >{{ venue.website }}</a
+      >{% else %}No Website{% endif %}
+    </p>
+    <p>
+      <i style="color: rgb(69, 141, 235)" class="fab fa-facebook-f"></i> {% if
+      venue.facebook_link %}<a href="{{ venue.facebook_link }}" target="_blank"
+        >{{ venue.facebook_link }}</a
+      >{% else %}No Facebook Link{% endif %}
+    </p>
+    {% if venue.seeking_talent %}
+    <div class="seeking">
+      <p class="lead">Currently seeking talent</p>
+      {% if venue.seeking_description %}
+      <div class="description">
+        <i style="color: rgb(69, 141, 235)" class="fas fa-quote-left"></i> {{
+        venue.seeking_description }}
+        <i style="color: rgb(69, 141, 235)" class="fas fa-quote-right"></i>
+      </div>
+      {% endif %}
+    </div>
+    {% else %}
+    <p class="not-seeking">
+      <i style="color: rgb(69, 141, 235)" class="fas fa-moon"></i> Not currently
+      seeking talent
+    </p>
+    {% endif %}
+  </div>
+  <div class="col-sm-6 items">
+    <img
+      style="box-shadow: #ff8000 3px 3px 3px"
+      src="{{ venue.image_link }}"
+      alt="Venue Image"
+    />
+  </div>
 </div>
 <section>
-	<h2 class="monospace">{{ venue.upcoming_shows_count }} Upcoming {% if venue.upcoming_shows_count == 1 %}Show{% else %}Shows{% endif %}</h2>
-	<div class="row">
-		{%for show in venue.upcoming_shows %}
-			{%if not show.deleted%}
-				<div class="col-sm-4">
-					<div class="tile tile-show">
-						<img src="{{ show.artist_image_link }}" alt="Show Artist Image" />
-						<h5><a href="/artists/{{ show.artist_id }}">{{ show.artist_name }}</a></h5>
-						<h6>{{ show.start_time|datetime('full') }}</h6>
-					</div>
-				</div>
-			{%endif%}
-		{% endfor %}
-	</div>
+  <h2 class="monospace">
+    {{ venue.upcoming_shows_count }} Upcoming {% if venue.upcoming_shows_count
+    == 1 %}Show{% else %}Shows{% endif %}
+  </h2>
+  <div class="row">
+    {%for show in venue.upcoming_shows %} {%if not show.deleted%}
+    <div class="col-sm-4">
+      <div class="tile tile-show">
+        <img src="{{ show.artist_image_link }}" alt="Show Artist Image" />
+        <h5>
+          <a href="/artists/{{ show.artist_id }}">{{ show.artist_name }}</a>
+        </h5>
+        <h6>{{ show.start_time|datetime('full') }}</h6>
+      </div>
+    </div>
+    {%endif%} {% endfor %}
+  </div>
 </section>
 <section>
-	<h2 class="monospace">{{ venue.past_shows_count }} Past {% if venue.past_shows_count == 1 %}Show{% else %}Shows{% endif %}</h2>
-	<div class="row">
-		{%for show in venue.past_shows %}
-		<div class="col-sm-4">
-			<div class="tile tile-show">
-				<img src="{{ show.artist_image_link }}" alt="Show Artist Image" />
-				{%if not show.deleted%}
-				<h5><a href="/artists/{{ show.artist_id }}">{{ show.artist_name }}</a></h5>
-				<h6>{{ show.start_time|datetime('full') }}</h6>
-				{%else%}
-				<h5>{{ show.artist_name }}</h5>
-				<h6>{{ show.start_time|datetime('full') }}</h6>
-				<h5 style="font-style: oblique;  color: red;">Artist currently deleted</h5>
-				{%endif%}
-
-			</div>
-		</div>
-		{% endfor %}
-	</div>
+  <h2 class="monospace">
+    {{ venue.past_shows_count }} Past {% if venue.past_shows_count == 1 %}Show{%
+    else %}Shows{% endif %}
+  </h2>
+  <div class="row">
+    {%for show in venue.past_shows %}
+    <div class="col-sm-4">
+      <div class="tile tile-show">
+        <img src="{{ show.artist_image_link }}" alt="Show Artist Image" />
+        {%if not show.deleted%}
+        <h5>
+          <a href="/artists/{{ show.artist_id }}">{{ show.artist_name }}</a>
+        </h5>
+        <h6>{{ show.start_time|datetime('full') }}</h6>
+        {%else%}
+        <h5>{{ show.artist_name }}</h5>
+        <h6>{{ show.start_time|datetime('full') }}</h6>
+        <h5 style="font-style: oblique; color: red">
+          Artist currently deleted
+        </h5>
+        {%endif%}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
 </section>
 <script>
-	//DB call method #2 using delete request 
-/* 	const deleteVenue =  document.getElementById("deleteBtn");
+  //DB call method #2 using delete request
+  /* 	const deleteVenue =  document.getElementById("deleteBtn");
 	deleteVenue.onclick = function (e) {
 	let proceed =false;
   	if (confirm("Delete Venue?")) {
@@ -125,9 +169,6 @@
 		});
 	}
 	} */
-
-
 </script>
-	
-{% endblock %}
 
+{% endblock %}
