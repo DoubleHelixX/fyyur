@@ -918,24 +918,23 @@ def create_app(test_config=None):
       else:
         return render_template('pages/shows.html', shows=resultData)
       
-  @app.route('/shows')
+  @app.route('/shows', methods=['POST','GET'])
   def shows(data=None):
     error=None
+    search=False
     try:
       # * Checking if there is a JSON body
-      body=None
-      selected_genre =None
-      selected_pane = None
-      try:
-        body = request.get_json()
-      finally:
-        if not body:
-          selected_genre = 'All'
-          selected_pane = 'pane_header_upcoming'
-      if body:
-        selected_genre = body.get('selected_genre', 'All')
-        selected_pane  = body.get('selected_pane', 'pane_header_upcoming')
-        
+      searchTerm = request.form.get('search_term',None)
+      if searchTerm:
+        searchTerm= searchTerm.lower()
+        selected_genre = 'Search'
+        selected_pane = 'All'
+      else:
+        selected_genre = 'All'
+        selected_pane = 'pane_header_upcoming'
+      #print('!!!', searchTerm)
+      default_past=[]
+      default_upcoming=[]
       resultData={
         'past': [],
         'upcoming' : [],
@@ -1005,38 +1004,71 @@ def create_app(test_config=None):
       for shows in showsData:
         if shows[1].deleted and shows[2].deleted:
           shows[0].deleted= True
-        
-        if not (shows[0].deleted):
-          if (shows[0].start_time <= datetime.today()): 
-            resultData['past'].append({
-            "venue_id": shows[2].id,
-            "venue_name": shows[2].name,
-            "venue_deleted": shows[2].deleted,
-            "artist_id": shows[1].id,
-            "artist_name": shows[1].name,
-            "artist_deleted": shows[1].deleted,
-            "artist_image_link": shows[1].image_link,
-            "start_time": str(shows[0].start_time)
-            })
-            print('<<<past', resultData['past'])
-          
-          elif (shows[0].start_time > datetime.today()): 
-            resultData['upcoming'].append({
-            "venue_id": shows[2].id,
-            "venue_name": shows[2].name,
-            "venue_deleted": shows[2].deleted,
-            "artist_id": shows[1].id,
-            "artist_name": shows[1].name,
-            "artist_deleted": shows[1].deleted,
-            "artist_image_link": shows[1].image_link,
-            "start_time": str(shows[0].start_time)
-            })
-            #print('<<<upcoming', resultData['upcoming']) 
-          else: 
-            #print('@ERROR', shows[0].start_time)
-            error=True
-      #print(f'{Fore.BLUE} result Data: {resultData}')
-    
+        if searchTerm:
+          print('!!!', searchTerm)
+          if not (shows[0].deleted) and (searchTerm in shows[1].name.lower() or searchTerm in shows[2].name.lower()):
+            if (shows[0].start_time <= datetime.today()): 
+              resultData['past'].append({
+              "venue_id": shows[2].id,
+              "venue_name": shows[2].name,
+              "venue_deleted": shows[2].deleted,
+              "artist_id": shows[1].id,
+              "artist_name": shows[1].name,
+              "artist_deleted": shows[1].deleted,
+              "artist_image_link": shows[1].image_link,
+              "start_time": str(shows[0].start_time)
+              })
+              #print('<<<past', resultData['past'])
+            
+            elif (shows[0].start_time > datetime.today()): 
+              resultData['upcoming'].append({
+              "venue_id": shows[2].id,
+              "venue_name": shows[2].name,
+              "venue_deleted": shows[2].deleted,
+              "artist_id": shows[1].id,
+              "artist_name": shows[1].name,
+              "artist_deleted": shows[1].deleted,
+              "artist_image_link": shows[1].image_link,
+              "start_time": str(shows[0].start_time)
+              })
+              #print('<<<upcoming', resultData['upcoming']) 
+            else: 
+              error=True
+          else:
+            if not len(resultData['upcoming']) and not len(resultData['past']):
+              search = False 
+              print('>A>A', len(resultData))
+            else:
+              search = True    
+        elif not searchTerm:
+          if not (shows[0].deleted):
+            if (shows[0].start_time <= datetime.today()): 
+              resultData['past'].append({
+              "venue_id": shows[2].id,
+              "venue_name": shows[2].name,
+              "venue_deleted": shows[2].deleted,
+              "artist_id": shows[1].id,
+              "artist_name": shows[1].name,
+              "artist_deleted": shows[1].deleted,
+              "artist_image_link": shows[1].image_link,
+              "start_time": str(shows[0].start_time)
+              })
+            elif (shows[0].start_time > datetime.today()): 
+              resultData['upcoming'].append({
+              "venue_id": shows[2].id,
+              "venue_name": shows[2].name,
+              "venue_deleted": shows[2].deleted,
+              "artist_id": shows[1].id,
+              "artist_name": shows[1].name,
+              "artist_deleted": shows[1].deleted,
+              "artist_image_link": shows[1].image_link,
+              "start_time": str(shows[0].start_time)
+              })
+              #print('<<<upcoming', resultData['upcoming']) 
+            else: 
+              error=True
+        else:
+          error=True
     except expression as identifier:
       db.session.rollback()
       error=True
@@ -1044,6 +1076,9 @@ def create_app(test_config=None):
       flash('An error occurred.')
     finally:
       db.session.close()
+      if not search and  (not len (resultData['upcoming']) and not len(resultData['past'])):
+        flash('No Results match.')
+        
       if error:
         return render_template('pages/home.html')
       else:
