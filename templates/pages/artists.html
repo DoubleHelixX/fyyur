@@ -16,11 +16,30 @@
 		</a>
 		{%if artist.image_link%}
 		<span class="artist_hover_img">
-			<img src= "{{ artist.image_link }}" alt="image"/>
+			<img src= "{{ artist.image_link }}" alt="image">
+
+				<span class="toggle_audio" style="margin:0px;  position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				-ms-transform: translate(-50%, -50%);
+				cursor: pointer;
+				border-radius: 5px;">
+				<input type="checkbox" onclick="play_pause('')">
+				<label data-off="Stop" data-on="Play"></label>
+			</span> 
+		</img>
 		</span>
 		{%endif%}
 	</li>
 	
 	{% endfor %}
 </ul>
+
+<script>
+
+
+
+
+</script>
 {% endblock %}
