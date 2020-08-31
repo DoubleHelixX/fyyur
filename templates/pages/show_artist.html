@@ -51,9 +51,21 @@
 		</p>
 		{% endif %}
 	</div>
+	
+	
 	<div class="col-sm-6 items">
 		<!-- <img src="{{ artist.image_link }}" alt="Venue Image" /> -->
-			<img style=' box-shadow: #ff8000 3px 3px 3px;' src= "{{ artist.image_link }}" alt="artist_image"/>
+		<div>
+			
+			<span class="toggle_audio" style="padding-top: 10px; margin:0px;">
+				<input type="checkbox" onclick="play_pause('{{artist.name}}')">
+				<label data-off="Stop" data-on="Play"></label>
+			</span>
+			<span class="main slide_none slide-right" id ='music_title_main'>
+				<p id="music_title">  "Turn the Tides" by {{artist.name}}  </p>
+			 </span>
+		</div>
+		<img style="box-shadow: #ff8000 3px 3px 3px;" src= "{{ artist.image_link }}" alt="artist_image"/>
 		
 	</div>
 </div>
@@ -123,7 +135,58 @@
 		});
 	}
 	
-} */
+	} */
+	let play_state=false;
+	message ='<p>"Turn the Tides" by {{artist.name}} </p>';
+	var title = [message];
+	var index = 0;
+
+	function change_title() {
+		var x = title[index];
+		$('.main').html(x);
+		index++;
+		if (index >= title.length) { index = 0; }
+	};
+
+	function change_left() {
+		$('span').removeClass('slide-right').addClass('slide-left');
+		
+
+	}
+
+	function change_right() {
+		$('span').removeClass('slide-left').addClass('slide-right');
+		change_title();
+	}
+
+	function to_left() {
+	setInterval(change_left, 10000);
+	};
+
+	function to_right() {
+		setInterval(change_right, 15000);
+	};
+
+	to_right();
+	to_left();
+
+	function play_pause(name){
+		
+		if(play_state == false){
+			console.log(play_state)
+			document.getElementById('music_title_main').className='main slide-right'
+			play_state=true
+			// let p_element = document.getElementById('music_title');
+			// p_element.textContent = '"Turn the Tides" by ' + name;
+		}
+		else if (play_state ==true) {
+			console.log(play_state)
+			document.getElementById('music_title_main').className='main slide_none'
+			play_state=false;
+		}
+}
+
+
 </script>
 {% endblock %}
 

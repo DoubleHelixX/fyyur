@@ -23,6 +23,12 @@ error message: create show first
 
 add pagination for show views up to 9 on one page
 
+rating system / review system for venues, artist, shows.
+
+testominal comments for shows
+ 
+artist and or shows can pick certain comments from show comments to be shown on their page as testominals
+
 I FINSHED :D for now.
 
 

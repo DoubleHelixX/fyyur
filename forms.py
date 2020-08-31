@@ -236,4 +236,16 @@ class ArtistForm(FlaskForm):
         'seeking_description', default='' #gave default values if left empty
     )
 
-
+class GetFeatured(FlaskForm):
+    show_id = IntegerField(
+        'show_id', validators=[DataRequired()]
+        )
+    feature_1_hour = BooleanField(
+        'feature_hour', default=False
+    )
+    feature_6_hours = BooleanField(
+        'feature_6_hours', default=False
+    )
+    feature_24_hours = BooleanField(
+        'feature_24_hours', default=False
+    )
