@@ -439,22 +439,20 @@ h2.monospace {
   box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
 }
 .featured{
-  -webkit-box-shadow: 6px 7px 44px 8px #000000;
+  /* -webkit-box-shadow: 6px 7px 44px 8px #000000; */
+  /* -webkit-box-shadow: 6px 7px 13px 4px #000000;
+  -webkit-box-shadow: 0 8px 6px -6px gray;
+  -moz-box-shadow: 0 8px 6px -6px gray;
+  box-shadow: 0 8px 6px -6px gray;
+  border: 2px outset #1C6EA4; */
+  /* border-radius: 38px 38px 40px 40px; */
 
-
-  border: 2px groove #1C6EA4;
-  border-radius: 38px 38px 40px 40px;
-  background: linear-gradient(180deg,#000,#1f1f1f);
-  background-image: linear-gradient(rgb(0, 0, 0), rgb(31, 31, 31));
-  background-position-x: initial;
-  background-position-y: initial;
-  background-size: initial;
-  background-repeat-x: initial;
-  background-repeat-y: initial;
-  background-attachment: initial;
-  background-origin: initial;
-  background-clip: initial;
-  background-color: initial;
+  /* background: linear-gradient(180deg,  rgb(31, 31, 31), #1f1f1f, rgb(255, 255, 255) );
+  background-image: linear-gradient(180deg, rgba(2,0,36,1) 0%, rgba(31,31,31,1) 58%, rgba(255,255,255,1) 85%, rgba(255,255,255,1) 100%);
+  background: linear-gradient(180deg, rgba(2,0,36,1) 0%, rgba(31,31,31,1) 41%, rgba(255,255,255,1) 65%, rgba(255,255,255,1) 100%); */
+  background-color: #1f1f1f;
+  -webkit-box-shadow: 6px 7px 13px 4px #000000;
+  border-color:black; border-radius: 38px 38px 40px 40px;
   
 }
 .featured_row{

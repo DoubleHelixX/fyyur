@@ -8,30 +8,61 @@
   <i class="fas fa-caret-down show_content_color" id="fas_content_featured"></i>
 </h2>
   <div class='featured_pane' id="pane_header_featured " style="display: block; ">
-  <div class="row shows featured_row">
-    {%for show in shows['upcoming'] %} {%if loop.index < 7 %}
-    <div class="col-sm-4 " >
-      <div class="tile tile-show featured " > 
-        <img style="box-shadow: 0 -1px 4px rgb(255, 255, 255), 0 -2px 10px #ff0, 0 -10px 20px #ff8000, 0 -18px 40px #F00;" src="{{ show.artist_image_link }}" alt="Artist Image" />
-        <h4 style='color:white;'>{{ show.start_time|datetime('full') }}</h4>
-        {%if show.artist_deleted%}
-        <h5 style="color: white">&#9940; {{ show.artist_name }} &#9940;</h5>
-        {%else%}
-        <h5>
-          <a href="/artists/{{ show.artist_id }}">{{ show.artist_name }}</a>
-        </h5>
-        {%endif%}
-        <p style='color:white;'>playing at</p>
-        {%if show.venue_deleted%}
-        <h5 style="color: white">&#9940; {{ show.venue_name }} &#9940;</h5>
-        {%else%}
-        <h5>
-          <a href="/venues/{{ show.venue_id }}">{{ show.venue_name }}</a>
-        </h5>
-        {%endif%}
+    <div style="padding-bottom: 20px;">
+
+      <button type="button" rel="tooltip" onclick="return popUpBay()"  class="btn btn-success">
+        <i class="material-icons">Get Featured!</i>
+      </button>
+
+    </div>
+
+    <div id="myModal" class="modal">
+      <!-- Modal content -->
+     
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <!-- POP UP CONTENT -->
+        <div class="table-header my-auto">
+          <p contentEditable="true" id ="create_bay_name" class="table-title"> Type Bay # Here </p>
+          <div class = "buttons"> 
+            <button type="button" rel="tooltip" id = 'createBtn' onclick="return createBay()" class="btn btn-success " value='create'>
+
+            <i  id = "confirmTxt" class="material-icons">Confirm?</i>
+            </button>
+          </div>
+        </div>
+
+        </div>
+
+
       </div>
     </div>
-    {% endif %} {% endfor %}
+  <div class="row shows featured_row">
+    {%for show in shows['upcoming'] %} 
+      {%if loop.index < 7 %}
+        <div class="col-sm-4 " >
+          <div class="tile tile-show featured " > 
+            <img style="box-shadow: 0 -1px 4px rgb(255, 255, 255), 0 -2px 10px #ff0, 0 -10px 20px #ff8000, 0 -18px 40px #F00;" src="{{ show.artist_image_link }}" alt="Artist Image" />
+            <h4 style='color:rgb(255, 255, 255);'>{{ show.start_time|datetime('full') }}</h4>
+            {%if show.artist_deleted%}
+              <h5 style="color: rgb(255, 255, 255)">&#9940; {{ show.artist_name }} &#9940;</h5>
+            {%else%}
+              <h5>
+                <a href="/artists/{{ show.artist_id }}">{{ show.artist_name }}</a>
+              </h5>
+            {%endif%}
+            <p style='color:rgb(255, 255, 255);'>playing at</p>
+            {%if show.venue_deleted%}
+              <h5 style="color: rgb(255, 255, 255)">&#9940; {{ show.venue_name }} &#9940;</h5>
+            {%else%}
+              <h5>
+                <a href="/venues/{{ show.venue_id }}">{{ show.venue_name }}</a>
+              </h5>
+            {%endif%}
+          </div>
+        </div>
+      {% endif %} 
+    {% endfor %}
   </div>
 </div>
 
@@ -224,6 +255,35 @@
     </div>
 
     <script>
+      function popUpBay(){
+  // Get the modal
+  var modal = document.getElementById("myModal");
+
+  // Get the button that opens the modal
+  var btn = document.getElementById("myBtn");
+
+  // Get the <span> element that closes the modal
+  var span = document.getElementsByClassName("close")[0];
+
+  // When the user clicks on the button, open the modal
+  modal.style.display = "block";
+  
+
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function() {
+    modal.style.display = "none";
+  }
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+
+
+  }
+
       function control_content_pane(element_id, btn_id, pane_id, fas_id) {
         var past_x = document.getElementById(pane_id);
         var past_y = document.getElementById(fas_id);
