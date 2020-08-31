@@ -24,3 +24,46 @@ error message: create show first
 add pagination for show views up to 9 on one page
 
 I FINSHED :D for now.
+
+
+-webkit-box-shadow: 5px 10px 20px -5px #ffffff; 
+
+    border-color:white;
+
+    background: linear-gradient(180deg,#000,#1f1f1f);
+    background-image: linear-gradient(rgb(0, 0, 0), rgb(31, 31, 31));
+    background-position-x: initial;
+    background-position-y: initial;
+    background-size: initial;
+    background-repeat-x: initial;
+    background-repeat-y: initial;
+    background-attachment: initial;
+    background-origin: initial;
+    background-clip: initial;
+    background-color: initial;
+    
+
+
+
+
+
+    ==
+    
+
+
+    -webkit-box-shadow: 0px 10px 20px 2px #ffffff; 
+
+    border-color:rgba(28,110,164,0.52);
+
+    background: linear-gradient(180deg,#000,#1f1f1f);
+    background-image: linear-gradient(rgb(0, 0, 0), rgb(31, 31, 31));
+    background-position-x: initial;
+    background-position-y: initial;
+    background-size: initial;
+    background-repeat-x: initial;
+    background-repeat-y: initial;
+    background-attachment: initial;
+    background-origin: initial;
+    background-clip: initial;
+    background-color: initial;
+    
