@@ -29,6 +29,8 @@ testominal comments for shows
  
 artist and or shows can pick certain comments from show comments to be shown on their page as testominals
 
+add top active artist/ venues on artist/venue pages
+
 I FINSHED :D for now.
 
 

@@ -16,27 +16,7 @@
 
     </div>
 
-    <div id="myModal" class="modal">
-      <!-- Modal content -->
-     
-      <div class="modal-content">
-        <span class="close">&times;</span>
-        <!-- POP UP CONTENT -->
-        <div class="table-header my-auto">
-          <p contentEditable="true" id ="create_bay_name" class="table-title"> Type Bay # Here </p>
-          <div class = "buttons"> 
-            <button type="button" rel="tooltip" id = 'createBtn' onclick="return createBay()" class="btn btn-success " value='create'>
-
-            <i  id = "confirmTxt" class="material-icons">Confirm?</i>
-            </button>
-          </div>
-        </div>
-
-        </div>
-
-
-      </div>
-    </div>
+   
   <div class="row shows featured_row">
     {%for show in shows['upcoming'] %} 
       {%if loop.index < 7 %}
@@ -65,6 +45,23 @@
     {% endfor %}
   </div>
 </div>
+<!--                      LEFT OFF HEREEE    -->
+<div id="myModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+  <span class="close">&times;</span>
+  <!-- POP UP CONTENT -->
+  
+
+        <form method="post" class="form" action="/artists/create">
+          <div class="form-group">
+            <label for="feature_24_hours">Duration</label>
+            {{ shows['form'].featured_hours(class_ = '', id="toggle") }}
+          </div>
+      </div>
+  </div>
+</div>
+
 
 {% if ((shows['selected_pane']|string()) == 'pane_header_upcoming') or
 ((shows['selected_pane']|string()) == 'All') %}
@@ -303,5 +300,3 @@
       }
     </script>
     {% endblock %}
-  </div>
-</div>

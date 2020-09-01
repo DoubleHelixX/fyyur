@@ -1,6 +1,6 @@
 from datetime import datetime
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField,BooleanField, IntegerField, validators,  SubmitField, DecimalField
+from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField,BooleanField, IntegerField, validators,  SubmitField, DecimalField,RadioField
 from wtforms.validators import DataRequired, AnyOf, URL, NumberRange
 
 #  *----------------------------------------------------------------------------#
@@ -240,12 +240,7 @@ class GetFeatured(FlaskForm):
     show_id = IntegerField(
         'show_id', validators=[DataRequired()]
         )
-    feature_1_hour = BooleanField(
-        'feature_hour', default=False
-    )
-    feature_6_hours = BooleanField(
-        'feature_6_hours', default=False
-    )
-    feature_24_hours = BooleanField(
-        'feature_24_hours', default=False
+    featured_hours = RadioField(
+        "Select how long you want to stay featured!",
+        choices=[('1', "1 Hour"), ('2', "6 Hours"), ('3', "24 Hours")]
     )

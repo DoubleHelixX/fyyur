@@ -783,6 +783,7 @@ def create_app(test_config=None):
   #  *----------------------------------------------------------------------------#
   @app.route('/shows/<string:selected_genre>/<string:selected_pane>')
   def shows_specific(selected_genre='All', selected_pane = 'pane_header_upcoming'):
+    form = GetFeatured()
     error=None
     search=True
     try:
@@ -812,7 +813,8 @@ def create_app(test_config=None):
                   'Other'
                   ],
         'selected_genre': selected_genre.capitalize(),
-        'selected_pane': selected_pane 
+        'selected_pane': selected_pane,
+        'form':form
         }
       #print('<<$', resultData['selected_pane'], resultData['selected_genre'])
       showsData = db.session.query(Show, Artist, Venue).filter(Show.artist_id == Artist.id).filter(Venue.id == Show.venue_id).order_by(Show.start_time.asc()).all()
@@ -920,6 +922,7 @@ def create_app(test_config=None):
       
   @app.route('/shows', methods=['POST','GET'])
   def shows(data=None):
+    form = GetFeatured()
     error=None
     search=False
     try:
@@ -961,7 +964,8 @@ def create_app(test_config=None):
                   'Other'
                   ],
         'selected_genre': selected_genre,
-        'selected_pane': selected_pane 
+        'selected_pane': selected_pane,
+        'form': form
         }
       #print('<<$', resultData['selected_pane'], resultData['selected_genre'])
       mockData=[{
