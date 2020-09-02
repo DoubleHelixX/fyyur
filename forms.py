@@ -236,7 +236,7 @@ class ArtistForm(FlaskForm):
         'seeking_description', default='' #gave default values if left empty
     )
 
-class GetFeatured(FlaskForm):
+class GetFeaturedForm(FlaskForm):
      show_id = StringField(
         'show_id', validators=[DataRequired()]
     )

@@ -922,12 +922,14 @@ def create_app(test_config=None):
       
   @app.route('/shows', methods=['POST','GET'])
   def shows(data=None):
-    form = GetFeatured()
+    form = GetFeaturedForm(request.form)
     error=None
     search=False
     try:
       # * Checking if there is a JSON body
       searchTerm = request.form.get('search_term',None)
+      featured = request.form.get('options',None)
+      exist=None
       if searchTerm:
         searchTerm= searchTerm.lower()
         selected_genre = 'Search'
@@ -936,143 +938,158 @@ def create_app(test_config=None):
         selected_genre = 'All'
         selected_pane = 'pane_header_upcoming'
       #print('!!!', searchTerm)
-      default_past=[]
-      default_upcoming=[]
-      resultData={
-        'past': [],
-        'upcoming' : [],
-        'genres': [
-                  'All',
-                  'Alternative', 
-                  'Blues', 
-                  'Classical', 
-                  'Country', 
-                  'Electronic',
-                  'Folk', 
-                  'Funk',
-                  'Hip-Hop', 
-                  'Heavy Metal',
-                  'Instrumental', 
-                  'Jazz', 
-                  'Musical Theatre', 
-                  'Pop', 
-                  'Punk',
-                  'R&B', 
-                  'Reggae',
-                  'Rock n Roll', 
-                  'Soul', 
-                  'Other'
-                  ],
-        'selected_genre': selected_genre,
-        'selected_pane': selected_pane,
-        'form': form
-        }
-      #print('<<$', resultData['selected_pane'], resultData['selected_genre'])
-      mockData=[{
-      "venue_id": 1,
-      "venue_name": "The Musical Hop",
-      "artist_id": 4,
-      "artist_name": "Guns N Petals",
-      "artist_image_link": "https://images.unsplash.com/photo-1549213783-8284d0336c4f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&q=80",
-      "start_time": "2019-05-21T21:30:00.000Z"
-      }, {
-      "venue_id": 3,
-      "venue_name": "Park Square Live Music & Coffee",
-      "artist_id": 5,
-      "artist_name": "Matt Quevedo",
-      "artist_image_link": "https://images.unsplash.com/photo-1495223153807-b916f75de8c5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80",
-      "start_time": "2019-06-15T23:00:00.000Z"
-      }, {
-      "venue_id": 3,
-      "venue_name": "Park Square Live Music & Coffee",
-      "artist_id": 6,
-      "artist_name": "The Wild Sax Band",
-      "artist_image_link": "https://images.unsplash.com/photo-1558369981-f9ca78462e61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=794&q=80",
-      "start_time": "2035-04-01T20:00:00.000Z"
-      }, {
-      "venue_id": 3,
-      "venue_name": "Park Square Live Music & Coffee",
-      "artist_id": 6,
-      "artist_name": "The Wild Sax Band",
-      "artist_image_link": "https://images.unsplash.com/photo-1558369981-f9ca78462e61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=794&q=80",
-      "start_time": "2035-04-08T20:00:00.000Z"
-      }, {
-      "venue_id": 3,
-      "venue_name": "Park Square Live Music & Coffee",
-      "artist_id": 6,
-      "artist_name": "The Wild Sax Band",
-      "artist_image_link": "https://images.unsplash.com/photo-1558369981-f9ca78462e61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=794&q=80",
-      "start_time": "2035-04-15T20:00:00.000Z"
-      }]
-      showsData = db.session.query(Show, Artist, Venue).filter(Show.artist_id == Artist.id).filter(Venue.id == Show.venue_id).order_by(Show.start_time.asc()).all()
-      for shows in showsData:
-        if shows[1].deleted and shows[2].deleted:
-          shows[0].deleted= True
-        if searchTerm:
-          print('!!!', searchTerm)
-          if not (shows[0].deleted) and (searchTerm in shows[1].name.lower() or searchTerm in shows[2].name.lower()):
-            if (shows[0].start_time <= datetime.today()): 
-              resultData['past'].append({
-              "venue_id": shows[2].id,
-              "venue_name": shows[2].name,
-              "venue_deleted": shows[2].deleted,
-              "artist_id": shows[1].id,
-              "artist_name": shows[1].name,
-              "artist_deleted": shows[1].deleted,
-              "artist_image_link": shows[1].image_link,
-              "start_time": str(shows[0].start_time)
-              })
-              #print('<<<past', resultData['past'])
-            
-            elif (shows[0].start_time > datetime.today()): 
-              resultData['upcoming'].append({
-              "venue_id": shows[2].id,
-              "venue_name": shows[2].name,
-              "venue_deleted": shows[2].deleted,
-              "artist_id": shows[1].id,
-              "artist_name": shows[1].name,
-              "artist_deleted": shows[1].deleted,
-              "artist_image_link": shows[1].image_link,
-              "start_time": str(shows[0].start_time)
-              })
-              #print('<<<upcoming', resultData['upcoming']) 
-            else: 
-              error=True
+      if featured:
+        exist = Show.query.get(form.show_id).one_or_none()
+        if exist:
+          exist=True
+        else:    
+          if featured== '1':
+            pass
+          elif featured == '2':
+            pass
+          elif featured=='3':
+            pass
           else:
-            if not len(resultData['upcoming']) and not len(resultData['past']):
-              search = False 
-              print('>A>A', len(resultData))
+            error=True
+          
+      if not featured:
+        default_past=[]
+        default_upcoming=[]
+        resultData={
+          'past': [],
+          'upcoming' : [],
+          'genres': [
+                    'All',
+                    'Alternative', 
+                    'Blues', 
+                    'Classical', 
+                    'Country', 
+                    'Electronic',
+                    'Folk', 
+                    'Funk',
+                    'Hip-Hop', 
+                    'Heavy Metal',
+                    'Instrumental', 
+                    'Jazz', 
+                    'Musical Theatre', 
+                    'Pop', 
+                    'Punk',
+                    'R&B', 
+                    'Reggae',
+                    'Rock n Roll', 
+                    'Soul', 
+                    'Other'
+                    ],
+          'selected_genre': selected_genre,
+          'selected_pane': selected_pane,
+          'form': form
+          }
+        #print('<<$', resultData['selected_pane'], resultData['selected_genre'])
+        mockData=[{
+        "venue_id": 1,
+        "venue_name": "The Musical Hop",
+        "artist_id": 4,
+        "artist_name": "Guns N Petals",
+        "artist_image_link": "https://images.unsplash.com/photo-1549213783-8284d0336c4f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&q=80",
+        "start_time": "2019-05-21T21:30:00.000Z"
+        }, {
+        "venue_id": 3,
+        "venue_name": "Park Square Live Music & Coffee",
+        "artist_id": 5,
+        "artist_name": "Matt Quevedo",
+        "artist_image_link": "https://images.unsplash.com/photo-1495223153807-b916f75de8c5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80",
+        "start_time": "2019-06-15T23:00:00.000Z"
+        }, {
+        "venue_id": 3,
+        "venue_name": "Park Square Live Music & Coffee",
+        "artist_id": 6,
+        "artist_name": "The Wild Sax Band",
+        "artist_image_link": "https://images.unsplash.com/photo-1558369981-f9ca78462e61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=794&q=80",
+        "start_time": "2035-04-01T20:00:00.000Z"
+        }, {
+        "venue_id": 3,
+        "venue_name": "Park Square Live Music & Coffee",
+        "artist_id": 6,
+        "artist_name": "The Wild Sax Band",
+        "artist_image_link": "https://images.unsplash.com/photo-1558369981-f9ca78462e61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=794&q=80",
+        "start_time": "2035-04-08T20:00:00.000Z"
+        }, {
+        "venue_id": 3,
+        "venue_name": "Park Square Live Music & Coffee",
+        "artist_id": 6,
+        "artist_name": "The Wild Sax Band",
+        "artist_image_link": "https://images.unsplash.com/photo-1558369981-f9ca78462e61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=794&q=80",
+        "start_time": "2035-04-15T20:00:00.000Z"
+        }]
+        showsData = db.session.query(Show, Artist, Venue).filter(Show.artist_id == Artist.id).filter(Venue.id == Show.venue_id).order_by(Show.start_time.asc()).all()
+        for shows in showsData:
+          if shows[1].deleted and shows[2].deleted:
+            shows[0].deleted= True
+          if searchTerm:
+            print('!!!', searchTerm)
+            if not (shows[0].deleted) and (searchTerm in shows[1].name.lower() or searchTerm in shows[2].name.lower()):
+              if (shows[0].start_time <= datetime.today()): 
+                resultData['past'].append({
+                "venue_id": shows[2].id,
+                "venue_name": shows[2].name,
+                "venue_deleted": shows[2].deleted,
+                "artist_id": shows[1].id,
+                "artist_name": shows[1].name,
+                "artist_deleted": shows[1].deleted,
+                "artist_image_link": shows[1].image_link,
+                "start_time": str(shows[0].start_time)
+                })
+                #print('<<<past', resultData['past'])
+              
+              elif (shows[0].start_time > datetime.today()): 
+                resultData['upcoming'].append({
+                "venue_id": shows[2].id,
+                "venue_name": shows[2].name,
+                "venue_deleted": shows[2].deleted,
+                "artist_id": shows[1].id,
+                "artist_name": shows[1].name,
+                "artist_deleted": shows[1].deleted,
+                "artist_image_link": shows[1].image_link,
+                "start_time": str(shows[0].start_time)
+                })
+                #print('<<<upcoming', resultData['upcoming']) 
+              else: 
+                error=True
             else:
-              search = True    
-        elif not searchTerm:
-          if not (shows[0].deleted):
-            if (shows[0].start_time <= datetime.today()): 
-              resultData['past'].append({
-              "venue_id": shows[2].id,
-              "venue_name": shows[2].name,
-              "venue_deleted": shows[2].deleted,
-              "artist_id": shows[1].id,
-              "artist_name": shows[1].name,
-              "artist_deleted": shows[1].deleted,
-              "artist_image_link": shows[1].image_link,
-              "start_time": str(shows[0].start_time)
-              })
-            elif (shows[0].start_time > datetime.today()): 
-              resultData['upcoming'].append({
-              "venue_id": shows[2].id,
-              "venue_name": shows[2].name,
-              "venue_deleted": shows[2].deleted,
-              "artist_id": shows[1].id,
-              "artist_name": shows[1].name,
-              "artist_deleted": shows[1].deleted,
-              "artist_image_link": shows[1].image_link,
-              "start_time": str(shows[0].start_time)
-              })
-              #print('<<<upcoming', resultData['upcoming']) 
-            else: 
-              error=True
-        else:
-          error=True
+              if not len(resultData['upcoming']) and not len(resultData['past']):
+                search = False 
+                print('>A>A', len(resultData))
+              else:
+                search = True    
+          elif not searchTerm:
+            if not (shows[0].deleted):
+              if (shows[0].start_time <= datetime.today()): 
+                resultData['past'].append({
+                "venue_id": shows[2].id,
+                "venue_name": shows[2].name,
+                "venue_deleted": shows[2].deleted,
+                "artist_id": shows[1].id,
+                "artist_name": shows[1].name,
+                "artist_deleted": shows[1].deleted,
+                "artist_image_link": shows[1].image_link,
+                "start_time": str(shows[0].start_time)
+                })
+              elif (shows[0].start_time > datetime.today()): 
+                resultData['upcoming'].append({
+                "venue_id": shows[2].id,
+                "venue_name": shows[2].name,
+                "venue_deleted": shows[2].deleted,
+                "artist_id": shows[1].id,
+                "artist_name": shows[1].name,
+                "artist_deleted": shows[1].deleted,
+                "artist_image_link": shows[1].image_link,
+                "start_time": str(shows[0].start_time)
+                })
+                #print('<<<upcoming', resultData['upcoming']) 
+              else: 
+                error=True
+          else:
+            error=True
     except expression as identifier:
       db.session.rollback()
       error=True

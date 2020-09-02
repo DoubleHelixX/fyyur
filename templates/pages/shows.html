@@ -56,7 +56,7 @@
   <div class='popup_body'>
   
     
-      <div class="form" id="popup_form"  >
+      <form class="form" id="popup_form"  method="POST" action="/shows/feature" >
         <div style="display: flex; justify-content: center;">
           <h2 class="popup_header" id=''> Become Featured!</h2>
         </div>
@@ -84,11 +84,11 @@
         </div>
 
         <div style="padding-top: 20px; display: flex; justify-content: center;">
-          <button type="button" rel="tooltip" id ='popup_btn' class="btn btn-success" style="justify-content: center;">
+          <button type="submit" rel="tooltip" id ='popup_btn' class="btn btn-success" style="justify-content: center;">
               <i class="material-icons">Feature me !</i>
             </button>
         </div>
-   </div>
+   </form>
 
             <!-- style='text-align: center; justify-content: center;' -->
   </div>
@@ -324,19 +324,19 @@
     }
   }
 
-  const pop_btn = document.querySelector('#popup_btn');
-        // handle click button
-        pop_btn.onclick = function () {
-    const rbs = document.querySelectorAll('input[name="options"]');
-        let selectedValue;
-        for (const rb of rbs) {
-            if (rb.checked) {
-                selectedValue = rb.value;
-                break;
-            }
-          }
-          alert(selectedValue)
-    // let selection = document.getElementById()
-  };
+  // const pop_btn = document.querySelector('#popup_btn');
+  //       // handle click button
+  //       pop_btn.onclick = function () {
+  //   const rbs = document.querySelectorAll('input[name="options"]');
+  //       let selectedValue;
+  //       for (const rb of rbs) {
+  //           if (rb.checked) {
+  //               selectedValue = rb.value;
+  //               break;
+  //           }
+  //         }
+  //         alert(selectedValue)
+          
+  // };
     </script>
     {% endblock %}
