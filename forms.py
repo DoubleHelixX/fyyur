@@ -237,10 +237,6 @@ class ArtistForm(FlaskForm):
     )
 
 class GetFeatured(FlaskForm):
-    show_id = IntegerField(
+     show_id = StringField(
         'show_id', validators=[DataRequired()]
-        )
-    featured_hours = RadioField(
-        "Select how long you want to stay featured!",
-        choices=[('1', "1 Hour"), ('2', "6 Hours"), ('3', "24 Hours")]
     )
