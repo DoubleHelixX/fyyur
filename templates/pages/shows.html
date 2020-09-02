@@ -19,7 +19,7 @@
 <div class='featured_pane' id="pane_header_featured " style="display: block; justify-content: center;">
 
   <div class="row shows featured_row">
-    {%for show in shows['upcoming'] %} 
+    {%for show in shows['featured'] %} 
       {%if loop.index < 7 %}
         <div class="col-sm-4 " >
           <div class="tile tile-show featured " > 
@@ -56,15 +56,15 @@
   <div class='popup_body'>
   
     
-      <form class="form" id="popup_form"  method="POST" action="/shows/feature" >
+      <form class="form" id="popup_form"  method="POST" action="/shows" >
         <div style="display: flex; justify-content: center;">
           <h2 class="popup_header" id=''> Become Featured!</h2>
         </div>
         <!-- <h3 class="form-heading">List a new artist </h3> -->
         <div class="btn-group" data-toggle="buttons">
 			
-          <label class="btn btn-default">
-            <input type="radio" name="options" id="option2" value="1" autocomplete="off"> 1 Hour
+          <label class="btn btn-default active">
+            <input type="radio" name="options" id="option2" checked="checked" value="1" autocomplete="off"> 1 Hour
             <span class="glyphicon glyphicon-ok"></span>
           </label>
     

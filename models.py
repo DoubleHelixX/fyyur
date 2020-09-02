@@ -164,7 +164,8 @@ class Show(db.Model):
     venue_id = db.Column(db.Integer, db.ForeignKey('venue.id'), nullable=False)
     start_time = db.Column(db.DateTime, nullable=False)
     deleted = db.Column(db.Boolean, default = False)
-
+    feature_time = db.Column(db.DateTime, nullable=True)
+    
 
 # *----------------------------------------------------------------------------#
 # *                             Filters.
