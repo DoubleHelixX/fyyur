@@ -34,6 +34,9 @@ add top active artist/ venues on artist/venue pages
 I FINSHED :D for now.
 
 
+left off: add show id on shows for client to see
+
+
 -webkit-box-shadow: 5px 10px 20px -5px #ffffff; 
 
     border-color:white;

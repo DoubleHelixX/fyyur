@@ -1043,7 +1043,7 @@ def create_app(test_config=None):
             db.session.commit()
             
           elif featured=='3':
-            exist.feature_time= ((datetime.today() + timedelta(hours=2400)).strftime(date_format))
+            exist.feature_time= ((datetime.today() + timedelta(hours=24)).strftime(date_format))
             db.session.commit()
           else:
             db.session.rollback()
@@ -1146,7 +1146,7 @@ def create_app(test_config=None):
         return render_template('pages/home.html')
       else:
         if valid_show==False:
-          flash("Get Featured Today :) Don't forget to enter the show ID")
+          flash("Invalid Show ID, Create a show first :)")
         return render_template('pages/shows.html', shows=resultData)
 
   @app.route('/shows/create')
