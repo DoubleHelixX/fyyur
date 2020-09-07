@@ -101,8 +101,14 @@ def create_app(test_config=None):
       priorArea = {"state":'',
                   "city": ''}
       allVenues= Venue.query.filter(Venue.deleted==False).order_by('state','city').all()
+      date_format = '%Y-%m-%d %H:%M:%S' 
+      date_allowance =((datetime.today() - timedelta(days=7)).strftime(date_format))
+      date_allowance_format = datetime.strptime(date_allowance,date_format).date()
+      
       for venue in allVenues:
-        current_show_count= len(Show.query.filter(and_(Show.venue_id==venue.id , not Show.deleted)).all())      
+        current_show = Show.query.filter(and_(Show.venue_id==venue.id , Show.deleted==False)).order_by(Show.start_time).all()  
+         
+        current_show_count= len(current_show )   
         if priorArea["state"] == venue.state and priorArea["city"] == venue.city:
           data= {
           "id": venue.id,
@@ -127,40 +133,50 @@ def create_app(test_config=None):
           priorArea["city"] = venue.city  
               
         returnData['venues_info'].append(data)
-        
+      
+      if(len(returnData['venues_info']) >=0):
+        current_show=None
+        current_show_count=None
         for i, venue in enumerate(returnData['venues_info']):
-          if i > 0 and venue['count']:
-            if venue['count'] > returnData['top_venues_info']['all'][i-1]['count']:
-              returnData['top_venues_info']['all'].pop(i-1)
-              returnData['top_venues_info']['all'].append(venue)
-            elif (venue['count'] == returnData['top_venues_info']['all'][i-1]['count']):
-              x = randint(1, 2)
-              if x==1:
+          # print('2', Show.query.filter(and_(Show.venue_id==venue['id'] , Show.deleted==False)).order_by(Show.start_time).all())
+          if len(Show.query.filter(and_(Show.venue_id==venue['id'] , Show.deleted==False)).order_by(Show.start_time).all()) >=0:
+            current_show = Show.query.filter(and_(Show.venue_id==venue['id'] , Show.deleted==False)).order_by(Show.start_time).all()
+            current_show_count= len(current_show)  
+           
+          if len(current_show):
+            if i > 0 and venue['count']:
+              print(date_allowance_format > datetime.today().date(), type(current_show[0].start_time ))
+              if (current_show[0].start_time >= date_allowance) and (current_show[0].start_time <= datetime.today()):
+                print('@ asdas')
+                if venue['count'] > returnData['top_venues_info']['week'][i-1]['count']:
+                  returnData['top_venues_info']['week'].pop(i-1)
+                  returnData['top_venues_info']['week'].append(venue)
+                elif (venue['count'] == returnData['top_venues_info']['all'][i-1]['count']):
+                  x = randint(1, 2)
+                  if x==1:
+                    returnData['top_venues_info']['week'].pop(i-1)
+                    returnData['top_venues_info']['week'].append(venue)
+              elif (current_show[0].start_time >= date_allowance and current_show[0].start_time <= datetime.today()):
+                returnData['top_venues_info']['week'].append(venue)   
+    
+              if venue['count'] > returnData['top_venues_info']['all'][i-1]['count']:
                 returnData['top_venues_info']['all'].pop(i-1)
                 returnData['top_venues_info']['all'].append(venue)
-          else:
-           returnData['top_venues_info']['all'].append(venue)
-        print('@ all', returnData['top_venues_info']['all'])
-        
-        
-        for i, venue in enumerate(returnData['venues_info']):
-          current_show = Show.query.filter(and_(Show.venue_id==venue.id , not Show.deleted)).order_by(Show.start_time.asc()).all()  
-          date_allowance = datetime.today() - timedelta(day=7).strftime(date_format)
-          if (i > 0 and venue['count']) and (current_show[0].start_time >= date_allowance and current_show[0].start_time <= datetime.today()):
-            if venue['count'] > returnData['top_venues_info']['week'][i-1]['count']:
-              returnData['top_venues_info']['week'].pop(i-1)
-              returnData['top_venues_info']['week'].append(venue)
-            elif (venue['count'] == returnData['top_venues_info']['all'][i-1]['count']):
-              x = randint(1, 2)
-              if x==1:
-                returnData['top_venues_info']['week'].pop(i-1)
+              elif (venue['count'] == returnData['top_venues_info']['all'][i-1]['count']):
+                x = randint(1, 2)
+                if x==1:
+                  returnData['top_venues_info']['all'].pop(i-1)
+                  returnData['top_venues_info']['all'].append(venue)
+            else:
+              if ((current_show[0].start_time >= date_allowance) and (current_show[0].start_time <= datetime.today())):
                 returnData['top_venues_info']['week'].append(venue)
-          elif (current_show[0].start_time >= date_allowance and current_show[0].start_time <= datetime.today()):
-           returnData['top_venues_info']['week'].append(venue)   
-        print('@ week' , returnData['top_venues_info']['week'])
-        
-        
-        
+              returnData['top_venues_info']['all'].append(venue)
+          print(i)
+          print('@ current show', current_show) 
+          print('@ date', date_allowance)
+          print('@ all', returnData['top_venues_info']['all'])
+          print('@ week' , returnData['top_venues_info']['week'])
+   
     except:
       flash('An error occurred listing the Venues. Redirecting to home page')
       error =True
