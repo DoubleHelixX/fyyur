@@ -5,6 +5,7 @@ from colorama import (
   Fore, 
   Style
   )
+from random import randint
 from flask import (
   Flask, 
   render_template,
@@ -27,6 +28,7 @@ import json
 from flask_cors import CORS
 
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import and_
 import logging
 from logging import Formatter, FileHandler
 from flask_wtf import FlaskForm
@@ -88,19 +90,28 @@ def create_app(test_config=None):
   def venues():
     error=False
     try:
-      returnData=[]
+      returnData={
+        'venues_info':[],
+        'top_venues_info':{
+          'all':[],
+          'week':[]
+          }         
+        }
+      
       priorArea = {"state":'',
                   "city": ''}
       allVenues= Venue.query.filter(Venue.deleted==False).order_by('state','city').all()
       for venue in allVenues:
+        current_show_count= len(Show.query.filter(and_(Show.venue_id==venue.id , not Show.deleted)).all())      
         if priorArea["state"] == venue.state and priorArea["city"] == venue.city:
           data= {
           "id": venue.id,
           "name": venue.name,
           "image_link": venue.image_link,
           "seeking_talent":venue.seeking_talent,
-          "num_of_shows": venue.num_of_shows
-          }        
+          "num_of_shows": venue.num_of_shows,
+          'count': current_show_count
+          }
         else:
           data= {
           "id": venue.id,
@@ -109,13 +120,48 @@ def create_app(test_config=None):
           "state": venue.state,
           "city": venue.city,
           "seeking_talent":venue.seeking_talent,
-          "num_of_shows": venue.num_of_shows
+          "num_of_shows": venue.num_of_shows,
+          'count': current_show_count
           }
-          
           priorArea["state"]= venue.state
-          priorArea["city"] = venue.city        
-        returnData.append(data)
-    except():
+          priorArea["city"] = venue.city  
+              
+        returnData['venues_info'].append(data)
+        
+        for i, venue in enumerate(returnData['venues_info']):
+          if i > 0 and venue['count']:
+            if venue['count'] > returnData['top_venues_info']['all'][i-1]['count']:
+              returnData['top_venues_info']['all'].pop(i-1)
+              returnData['top_venues_info']['all'].append(venue)
+            elif (venue['count'] == returnData['top_venues_info']['all'][i-1]['count']):
+              x = randint(1, 2)
+              if x==1:
+                returnData['top_venues_info']['all'].pop(i-1)
+                returnData['top_venues_info']['all'].append(venue)
+          else:
+           returnData['top_venues_info']['all'].append(venue)
+        print('@ all', returnData['top_venues_info']['all'])
+        
+        
+        for i, venue in enumerate(returnData['venues_info']):
+          current_show = Show.query.filter(and_(Show.venue_id==venue.id , not Show.deleted)).order_by(Show.start_time.asc()).all()  
+          date_allowance = datetime.today() - timedelta(day=7).strftime(date_format)
+          if (i > 0 and venue['count']) and (current_show[0].start_time >= date_allowance and current_show[0].start_time <= datetime.today()):
+            if venue['count'] > returnData['top_venues_info']['week'][i-1]['count']:
+              returnData['top_venues_info']['week'].pop(i-1)
+              returnData['top_venues_info']['week'].append(venue)
+            elif (venue['count'] == returnData['top_venues_info']['all'][i-1]['count']):
+              x = randint(1, 2)
+              if x==1:
+                returnData['top_venues_info']['week'].pop(i-1)
+                returnData['top_venues_info']['week'].append(venue)
+          elif (current_show[0].start_time >= date_allowance and current_show[0].start_time <= datetime.today()):
+           returnData['top_venues_info']['week'].append(venue)   
+        print('@ week' , returnData['top_venues_info']['week'])
+        
+        
+        
+    except:
       flash('An error occurred listing the Venues. Redirecting to home page')
       error =True
     finally:
@@ -1066,7 +1112,8 @@ def create_app(test_config=None):
                 "artist_deleted": shows[1].deleted,
                 "artist_image_link": shows[1].image_link,
                 "start_time": str(shows[0].start_time),
-                "featured_time": str(shows[0].feature_time)
+                "featured_time": str(shows[0].feature_time),
+                "show_id" : shows[0].id
                 })
         if searchTerm:
           print('!!!', searchTerm)
@@ -1080,7 +1127,9 @@ def create_app(test_config=None):
               "artist_name": shows[1].name,
               "artist_deleted": shows[1].deleted,
               "artist_image_link": shows[1].image_link,
-              "start_time": str(shows[0].start_time)
+              "start_time": str(shows[0].start_time),
+              "show_id" : shows[0].id
+              
               })
               #print('<<<past', resultData['past'])
             
@@ -1093,7 +1142,9 @@ def create_app(test_config=None):
               "artist_name": shows[1].name,
               "artist_deleted": shows[1].deleted,
               "artist_image_link": shows[1].image_link,
-              "start_time": str(shows[0].start_time)
+              "start_time": str(shows[0].start_time),
+              "show_id" : shows[0].id
+              
               })
               #print('<<<upcoming', resultData['upcoming']) 
             else: 
@@ -1115,7 +1166,9 @@ def create_app(test_config=None):
               "artist_name": shows[1].name,
               "artist_deleted": shows[1].deleted,
               "artist_image_link": shows[1].image_link,
-              "start_time": str(shows[0].start_time)
+              "start_time": str(shows[0].start_time),
+              "show_id" : shows[0].id
+              
               })
             elif (shows[0].start_time > datetime.today()): 
               resultData['upcoming'].append({
@@ -1126,7 +1179,9 @@ def create_app(test_config=None):
               "artist_name": shows[1].name,
               "artist_deleted": shows[1].deleted,
               "artist_image_link": shows[1].image_link,
-              "start_time": str(shows[0].start_time)
+              "start_time": str(shows[0].start_time),
+              "show_id" : shows[0].id
+              
               })
               #print('<<<upcoming', resultData['upcoming']) 
             else: 

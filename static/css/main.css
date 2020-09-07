@@ -730,3 +730,103 @@ box-shadow: 4px -4px 15px 0px #FF1F1F, 12px -11px 7px 0px #FF9376, 20px -5px 7px
 .btn.active span.glyphicon {				
 	opacity: 1;				
 }
+
+
+.btn-success{
+  background: #000000;
+  box-shadow: 0 0 0 -2px #000000,
+              inset 0 0 0 1px rgb(0, 0, 0);
+ 
+}
+
+.show_subtitle{
+  display: table-footer-group;
+  float: left;
+  margin: 0; 
+  padding: 0; 
+  color:white;
+  width: 85px;
+  height: 0px;
+  
+}
+
+.artist_subtitle{
+  display: table-footer-group;
+  float: left;
+  margin: 0; 
+  padding: 0; 
+  color:rgb(0, 0, 0);
+  width: 85px;
+  height: 0px;
+}
+
+.venue_subtitle{
+  display: inline-flex;
+  color:rgb(0, 0, 0);
+  width: 10px;
+  height: 0px;
+}
+
+.venue_top{
+  font-size: 2.55rem;
+  font-weight: 100;
+  text-transform: uppercase;
+  color: rgb(0, 0, 0);
+  text-shadow: 0 -1px 4px rgb(255, 255, 255), 0 -2px 10px #ff0, 0 -10px 20px #ff8000, 0 -18px 40px #F00;
+  font-family: "Fantasy"; 
+  font-size: 23px;
+  letter-spacing: 2px;
+  word-spacing: 2px;
+  font-style: normal;
+  font-variant: small-caps; 
+  
+  display: flex;
+}
+
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons that are used to open the tab content */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+
+.tabcontent {
+  animation: fadeEffect 1s; /* Fading effect takes 1 second */
+}
+
+/* Go from zero to full opacity */
+@keyframes fadeEffect {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+

@@ -2,6 +2,38 @@
 {% block title %}Fyyur | Venues{% endblock %}
 {% block content %}
 
+<div style="float: right; ">
+	<h2 class="venue_top"  id=''> Top Venues</h2>
+
+	<div class="tab">
+		<button class="tablinks tab_opened" onclick="openCity(event, 'tab_week')" id="defaultOpen">Week</button>
+		<button class="tablinks tab_closed" onclick="openCity(event, 'tab_all')">All Time</button>
+	  </div>
+	  <!-- Tab content -->
+	<div id="tab_week" class="tabcontent">
+		<div class="row" style="padding-top: 20px;">
+			<div class="col-sm-4" >
+			<div class="tile tile-show" >
+				lol
+			</div>
+			</div>
+			
+		</div>
+	</div>
+
+	<div id="tab_all" class="tabcontent">
+		<div class="row" style="padding-top: 20px;">
+			<div class="col-sm-4" >
+			<div class="tile tile-show" >
+				lol
+			</div>
+			</div>
+			
+		</div>
+	</div>
+
+
+</div>
 
 	<ul class="items">
 		{% for venue in venues %}
@@ -19,11 +51,47 @@
 			</div>
 		{%if venue.image_link%}
 			<span class="venue_hover_img">
-				<img src= "{{ venue.image_link }}" alt="image"/>
+				<img src= "{{ venue.image_link }}" alt="image">
+				<span class="toggle_audio" style="margin:0px;  position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				-ms-transform: translate(-50%, -50%);
+				cursor: pointer;
+				border-radius: 5px;">
+				<input type="checkbox" onclick="play_pause('')">
+				<label data-off="Stop" data-on="Play"></label>
+			</span> </img>
 			</span>
 		{%endif%}
 
 		</li>
 	{% endfor %}
 	</ul>
+
+
+	<script>
+document.getElementById("defaultOpen").click();
+function openCity(evt, tabName) {
+  // Declare all variables
+  var i, tabcontent, tablinks;
+
+  // Get all elements with class="tabcontent" and hide them
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+
+  // Get all elements with class="tablinks" and remove the class "active"
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+
+  // Show the current tab, and add an "active" class to the button that opened the tab
+  document.getElementById(tabName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+	</script>
 {% endblock %}
+

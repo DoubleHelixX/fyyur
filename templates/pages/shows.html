@@ -32,6 +32,7 @@
                 <a href="/artists/{{ show.artist_id }}">{{ show.artist_name }}</a>
               </h5>
             {%endif%}
+            <p class="subtitle show_subtitle">Show ID: {{ show.show_id }}</p>
             <p style='color:rgb(255, 255, 255);'>playing at</p>
             {%if show.venue_deleted%}
               <h5 style="color: rgb(255, 255, 255)">&#9940; {{ show.venue_name }} &#9940;</h5>
@@ -167,7 +168,8 @@
       {%for show in shows['upcoming']%}
       <div class="col-sm-4">
         <div class="tile tile-show tinted">
-          <img src="{{ show.artist_image_link }}" alt="Artist Image" />
+
+          <img style = "border: 2px black solid;" src="{{ show.artist_image_link }}" alt="Artist Image" />
           <h4>{{ show.start_time|datetime('full') }}</h4>
           {%if show.artist_deleted%}
           <h5 style="color: black">&#9940; {{ show.artist_name }} &#9940;</h5>
@@ -176,6 +178,8 @@
             <a href="/artists/{{ show.artist_id }}">{{ show.artist_name }}</a>
           </h5>
           {%endif%}
+          <p style="color:black;" class="subtitle show_subtitle">Show ID: {{ show.show_id }}</p>
+
           <p>playing at</p>
           {%if show.venue_deleted%}
           <h5 style="color: black">&#9940; {{ show.venue_name }} &#9940;</h5>
@@ -261,6 +265,7 @@
         {%for show in shows['past']%}
         <div class="col-sm-4">
           <div class="tile tile-show tinted">
+
             <img src="{{ show.artist_image_link }}" alt="Artist Image" />
             <h4>{{ show.start_time|datetime('full') }}</h4>
             {%if show.artist_deleted%}
@@ -270,6 +275,8 @@
               <a href="/artists/{{ show.artist_id }}">{{ show.artist_name }}</a>
             </h5>
             {%endif%}
+          <p style="color:black;" class="subtitle show_subtitle">Show ID: {{ show.show_id }}</p>
+
             <p>playing at</p>
             {%if show.venue_deleted%}
             <h5 style="color: black">&#9940; {{ show.venue_name }} &#9940;</h5>
