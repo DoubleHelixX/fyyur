@@ -8,6 +8,7 @@ from sqlalchemy import (
   func,
   DateTime
 )
+from datetime import datetime
 from constants import (
   database_setup,
   jsonData,
@@ -165,6 +166,7 @@ class Show(db.Model):
     start_time = db.Column(db.DateTime, nullable=False)
     deleted = db.Column(db.Boolean, default = False)
     feature_time = db.Column(db.DateTime, nullable=True)
+    created_time = db.Column(db.DateTime, nullable=True, default=datetime.today())
     
 
 # *----------------------------------------------------------------------------#

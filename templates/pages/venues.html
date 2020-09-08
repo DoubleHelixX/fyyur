@@ -11,14 +11,23 @@
 	  </div>
 	  <!-- Tab content -->
 	<div id="tab_week" class="tabcontent">
-		<div class="row" style="padding-top: 20px;">
-			<div class="col-sm-4" >
-			<div class="tile tile-show" >
-				lol
-			</div>
-			</div>
-			
-		</div>
+		<div class="row shows featured_row" style="width: 621px; height: 1000px;">
+			{%for venue in venues['week'] %} 
+			  {%if loop.index < 7 %}
+				<div class="col-sm-4 " style="width: 50%;" >
+				  <div class="tile tile-show featured " style="height: auto;" > 
+					<img style="box-shadow: 0 -1px 4px rgb(255, 255, 255), 0 -2px 10px #ff0, 0 -10px 20px #ff8000, 0 -18px 40px #F00;" src="{{ venue['image_link'] }}" alt="Venue Image" />
+					  <h5>
+						<a href="/venues/{{ venue['id'] }}">{{ venue['name'] }}</a>
+					  </h5>
+					  <h4 style='color:rgb(255, 255, 255);'>Total Shows Performed: {{ venue['count'] }}</h4>
+					<!-- <p class="subtitle show_subtitle">Venue ID: {{ venue['id'] }}</p> -->
+	
+				  </div>
+				</div>
+			  {% endif %} 
+			{% endfor %}
+		  </div>
 	</div>
 
 	<div id="tab_all" class="tabcontent">

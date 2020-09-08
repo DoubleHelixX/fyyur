@@ -5,6 +5,7 @@ from colorama import (
   Fore, 
   Style
   )
+from operator import itemgetter
 from random import randint
 from flask import (
   Flask, 
@@ -92,10 +93,9 @@ def create_app(test_config=None):
     try:
       returnData={
         'venues_info':[],
-        'top_venues_info':{
-          'all':[],
-          'week':[]
-          }         
+        'all':[],
+        'week':[]
+                 
         }
       
       priorArea = {"state":'',
@@ -103,12 +103,15 @@ def create_app(test_config=None):
       allVenues= Venue.query.filter(Venue.deleted==False).order_by('state','city').all()
       date_format = '%Y-%m-%d %H:%M:%S' 
       date_allowance =((datetime.today() - timedelta(days=7)).strftime(date_format))
-      date_allowance_format = datetime.strptime(date_allowance,date_format).date()
+      date_allowance_format = datetime.strptime(date_allowance,date_format)
       
       for venue in allVenues:
-        current_show = Show.query.filter(and_(Show.venue_id==venue.id , Show.deleted==False)).order_by(Show.start_time).all()  
-         
-        current_show_count= len(current_show )   
+        current_show=""
+        current_show_count=0
+        if Show.query.filter(and_(Show.venue_id==venue.id , Show.deleted==False)).order_by(Show.created_time).all():
+          current_show = Show.query.filter(and_(Show.venue_id==venue.id , Show.deleted==False)).order_by(Show.created_time).all()
+          current_show_count= len(current_show) 
+            
         if priorArea["state"] == venue.state and priorArea["city"] == venue.city:
           data= {
           "id": venue.id,
@@ -138,45 +141,98 @@ def create_app(test_config=None):
         current_show=None
         current_show_count=None
         for i, venue in enumerate(returnData['venues_info']):
-          # print('2', Show.query.filter(and_(Show.venue_id==venue['id'] , Show.deleted==False)).order_by(Show.start_time).all())
-          if len(Show.query.filter(and_(Show.venue_id==venue['id'] , Show.deleted==False)).order_by(Show.start_time).all()) >=0:
-            current_show = Show.query.filter(and_(Show.venue_id==venue['id'] , Show.deleted==False)).order_by(Show.start_time).all()
-            current_show_count= len(current_show)  
+          # print('2', Show.query.filter(and_(Show.venue_id==venue['id'] , Show.deleted==False)).order_by(Show.created_time).all())
+          # shows = Show.query.all()
+          # for show in shows:
+          #   show.created_time=datetime.today()
+          #   db.session.commit()
+          # print('i: ', i, 'venue', venue, ' len: ', Show.query.filter(and_(Show.venue_id==venue['id'] , Show.deleted==False)).first())
+          
+          if Show.query.filter(and_(Show.venue_id==venue['id'] , Show.deleted==False)).first():
+            # print('step 1')
+            current_show = Show.query.filter(and_(Show.venue_id==venue['id'] , Show.deleted==False)).order_by(Show.created_time).all()
+            current_show_count = len(current_show)
+            # print('current_show ', current_show, ' current_show_count ', current_show_count)  
            
-          if len(current_show):
-            if i > 0 and venue['count']:
-              print(date_allowance_format > datetime.today().date(), type(current_show[0].start_time ))
-              if (current_show[0].start_time >= date_allowance) and (current_show[0].start_time <= datetime.today()):
-                print('@ asdas')
-                if venue['count'] > returnData['top_venues_info']['week'][i-1]['count']:
-                  returnData['top_venues_info']['week'].pop(i-1)
-                  returnData['top_venues_info']['week'].append(venue)
-                elif (venue['count'] == returnData['top_venues_info']['all'][i-1]['count']):
-                  x = randint(1, 2)
-                  if x==1:
-                    returnData['top_venues_info']['week'].pop(i-1)
-                    returnData['top_venues_info']['week'].append(venue)
-              elif (current_show[0].start_time >= date_allowance and current_show[0].start_time <= datetime.today()):
-                returnData['top_venues_info']['week'].append(venue)   
-    
-              if venue['count'] > returnData['top_venues_info']['all'][i-1]['count']:
-                returnData['top_venues_info']['all'].pop(i-1)
-                returnData['top_venues_info']['all'].append(venue)
-              elif (venue['count'] == returnData['top_venues_info']['all'][i-1]['count']):
-                x = randint(1, 2)
-                if x==1:
-                  returnData['top_venues_info']['all'].pop(i-1)
-                  returnData['top_venues_info']['all'].append(venue)
-            else:
-              if ((current_show[0].start_time >= date_allowance) and (current_show[0].start_time <= datetime.today())):
-                returnData['top_venues_info']['week'].append(venue)
-              returnData['top_venues_info']['all'].append(venue)
-          print(i)
-          print('@ current show', current_show) 
-          print('@ date', date_allowance)
-          print('@ all', returnData['top_venues_info']['all'])
-          print('@ week' , returnData['top_venues_info']['week'])
-   
+          if current_show:
+            # print('step 2')
+            
+            if venue['count'] !=0:
+              # print('step 3 - returnData[week]: ', returnData['week'] ,'len: ', (len(returnData['week']) > 0), 'show time >= 7 days ago: ', current_show[0].created_time >= date_allowance_format, 'show time <= today time', current_show[0].created_time <= datetime.today())
+              
+              if len(returnData['week']) ==6 and ((current_show[0].created_time >= date_allowance_format) and (current_show[0].created_time <= datetime.today())):
+                # print('step 4 ' , 'len(returnData[week]) <=6 and len(returnData[week]) >0: ', len(returnData['week']) <=6 and len(returnData['week']) >0)
+                
+                for data in returnData['week']:
+                  # print('step 6 - data:' , data, ' venue[count] > data[count] ', venue['count'] > data['count'])
+                  
+                  if venue['count'] > data['count']:
+                    # print('before: returnData[week] ', returnData['week'])
+                    
+                    index=returnData['week'].index(data) 
+                    returnData['week'].pop(index)
+                    returnData['week'].append(venue)
+                    # print('after: returnData[week] ', returnData['week'])
+                    
+                  elif (venue['count'] == data['count']):
+                    x = randint(1, 2)
+                    # print('@ 1b' , x)
+                    
+                    if x==1:
+                      # print('@ 1ba', returnData['week'].index(data))   
+                      index =returnData['week'].index(data)
+                      returnData['week'].pop(index)
+                      returnData['week'].append(venue)
+                      # print('@ 1ba after: ' , returnData['week']) 
+              elif ((current_show[0].created_time >= date_allowance_format) and (current_show[0].created_time <= datetime.today())):
+                returnData['week'].append(venue)
+                # print('appended', venue)
+              else:
+                print('@bruh ' , (current_show[0].created_time >= date_allowance_format) and (current_show[0].created_time <= datetime.today()), current_show[0].created_time , date_allowance_format , datetime.today() )
+              
+              # print('i', i)
+              if len(returnData['all']) ==6:
+                # print('step 4 ' , 'len(returnData[week]) <=6 and len(returnData[week]) >0: ', len(returnData['week']) <=6 and len(returnData['week']) >0)
+                
+                for data in returnData['all']:
+                  # print('step 6 - data:' , data, ' venue[count] > data[count] ', venue['count'] > data['count'])
+                  
+                  if venue['count'] > data['count']:
+                    # print('before: returnData[week] ', returnData['week'])
+                    
+                    index=returnData['all'].index(data) 
+                    returnData['all'].pop(index)
+                    returnData['all'].append(venue)
+                    break
+                    # print('after: returnData[week] ', returnData['week'])
+                    
+                  elif (venue['count'] == data['count']):
+                    x = randint(1, 2)
+                    # print('@ 1b' , x)
+                    
+                    if x==1:
+                      # print('@ 1ba', returnData['week'].index(data))   
+                      index =returnData['all'].index(data)
+                      returnData['all'].pop(index)
+                      returnData['all'].append(venue)
+                      break
+                      # print('@ 1ba after: ' , returnData['week']) 
+              else:
+                returnData['all'].append(venue)
+                # print('appended', venue)
+             
+              
+              
+          # print('@ current show', current_show) 
+          # if returnData['all']:
+          #   print('@ all length', len(returnData['all']))
+          # if returnData['week']:
+          #   print('@ week length' , len(returnData['week']))
+          
+      # print('@ week length' , len(returnData['week']))
+      # print('length of returnData ' , len(returnData['venues_info']))
+      print('@ all length' , len(returnData['all']))
+      print('@ all length' , len(returnData['week']))
     except:
       flash('An error occurred listing the Venues. Redirecting to home page')
       error =True
@@ -1245,6 +1301,7 @@ def create_app(test_config=None):
             show.artist_id = artistID
             show.venue_id = venueID
             show.start_time = datetime.strptime(startDate, date_format)
+            show.created_time=datetime.today()
             venue.num_of_shows +=1
             artist.num_of_shows +=1
             db.session.add(show) 
