@@ -19,7 +19,7 @@ section > h2 {
 }
 a {
   cursor: pointer;
-  color: #ff8c3a;
+  color: #3aa0ff;
 }
 .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus {
   background: initial;

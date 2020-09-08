@@ -5,7 +5,7 @@ from colorama import (
   Fore, 
   Style
   )
-from operator import itemgetter
+from operator import itemgetter, attrgetter
 from random import randint
 from flask import (
   Flask, 
@@ -140,6 +140,8 @@ def create_app(test_config=None):
       if(len(returnData['venues_info']) >=0):
         current_show=None
         current_show_count=None
+        returnDataSortedWeek=None
+        returnDataSortedAll=None
         for i, venue in enumerate(returnData['venues_info']):
           # print('2', Show.query.filter(and_(Show.venue_id==venue['id'] , Show.deleted==False)).order_by(Show.created_time).all())
           # shows = Show.query.all()
@@ -160,9 +162,16 @@ def create_app(test_config=None):
             if venue['count'] !=0:
               # print('step 3 - returnData[week]: ', returnData['week'] ,'len: ', (len(returnData['week']) > 0), 'show time >= 7 days ago: ', current_show[0].created_time >= date_allowance_format, 'show time <= today time', current_show[0].created_time <= datetime.today())
               
-              if len(returnData['week']) ==6 and ((current_show[0].created_time >= date_allowance_format) and (current_show[0].created_time <= datetime.today())):
+              if len(returnData['week']) >5 and ((current_show[0].created_time >= date_allowance_format) and (current_show[0].created_time <= datetime.today())):
                 # print('step 4 ' , 'len(returnData[week]) <=6 and len(returnData[week]) >0: ', len(returnData['week']) <=6 and len(returnData['week']) >0)
+             
+                returnData['week']= sorted(returnData['week'], key=lambda i: i['count'], reverse=True)
                 
+                # print( i, ': \n\n')
+                # for x in returnData['week']:
+                #   print(' ', x, '\n')
+                  
+                # print(returnDataSorted)
                 for data in returnData['week']:
                   # print('step 6 - data:' , data, ' venue[count] > data[count] ', venue['count'] > data['count'])
                   
@@ -172,6 +181,7 @@ def create_app(test_config=None):
                     index=returnData['week'].index(data) 
                     returnData['week'].pop(index)
                     returnData['week'].append(venue)
+                    break
                     # print('after: returnData[week] ', returnData['week'])
                     
                   elif (venue['count'] == data['count']):
@@ -183,16 +193,24 @@ def create_app(test_config=None):
                       index =returnData['week'].index(data)
                       returnData['week'].pop(index)
                       returnData['week'].append(venue)
+                      break
                       # print('@ 1ba after: ' , returnData['week']) 
-              elif ((current_show[0].created_time >= date_allowance_format) and (current_show[0].created_time <= datetime.today())):
+                      
+              elif len(returnData['week']) < 6 and ((current_show[0].created_time >= date_allowance_format) and (current_show[0].created_time <= datetime.today())):
                 returnData['week'].append(venue)
                 # print('appended', venue)
               else:
                 print('@bruh ' , (current_show[0].created_time >= date_allowance_format) and (current_show[0].created_time <= datetime.today()), current_show[0].created_time , date_allowance_format , datetime.today() )
               
               # print('i', i)
-              if len(returnData['all']) ==6:
+              if len(returnData['all']) >5:
                 # print('step 4 ' , 'len(returnData[week]) <=6 and len(returnData[week]) >0: ', len(returnData['week']) <=6 and len(returnData['week']) >0)
+                
+                returnData['all']= sorted(returnData['all'], key=lambda i: i['count'], reverse=True)
+                # print( i, ': \n\n')
+                # for x in returnData['all']:
+                #   print(' ', x, '\n')
+                  
                 
                 for data in returnData['all']:
                   # print('step 6 - data:' , data, ' venue[count] > data[count] ', venue['count'] > data['count'])
@@ -217,22 +235,12 @@ def create_app(test_config=None):
                       returnData['all'].append(venue)
                       break
                       # print('@ 1ba after: ' , returnData['week']) 
-              else:
+              elif len(returnData['all']) < 6:
                 returnData['all'].append(venue)
                 # print('appended', venue)
-             
-              
-              
-          # print('@ current show', current_show) 
-          # if returnData['all']:
-          #   print('@ all length', len(returnData['all']))
-          # if returnData['week']:
-          #   print('@ week length' , len(returnData['week']))
-          
-      # print('@ week length' , len(returnData['week']))
-      # print('length of returnData ' , len(returnData['venues_info']))
-      print('@ all length' , len(returnData['all']))
-      print('@ all length' , len(returnData['week']))
+                
+        returnData['week']= sorted(returnData['week'], key=lambda i: i['count'], reverse=True)
+        returnData['all']= sorted(returnData['all'], key=lambda i: i['count'], reverse=True)
     except:
       flash('An error occurred listing the Venues. Redirecting to home page')
       error =True

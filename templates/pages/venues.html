@@ -2,82 +2,101 @@
 {% block title %}Fyyur | Venues{% endblock %}
 {% block content %}
 
-<div style="float: right; ">
-	<h2 class="venue_top"  id=''> Top Venues</h2>
-
-	<div class="tab">
-		<button class="tablinks tab_opened" onclick="openCity(event, 'tab_week')" id="defaultOpen">Week</button>
-		<button class="tablinks tab_closed" onclick="openCity(event, 'tab_all')">All Time</button>
-	  </div>
-	  <!-- Tab content -->
-	<div id="tab_week" class="tabcontent">
-		<div class="row shows featured_row" style="width: 621px; height: 1000px;">
-			{%for venue in venues['week'] %} 
-			  {%if loop.index < 7 %}
-				<div class="col-sm-4 " style="width: 50%;" >
-				  <div class="tile tile-show featured " style="height: auto;" > 
-					<img style="box-shadow: 0 -1px 4px rgb(255, 255, 255), 0 -2px 10px #ff0, 0 -10px 20px #ff8000, 0 -18px 40px #F00;" src="{{ venue['image_link'] }}" alt="Venue Image" />
-					  <h5>
-						<a href="/venues/{{ venue['id'] }}">{{ venue['name'] }}</a>
-					  </h5>
-					  <h4 style='color:rgb(255, 255, 255);'>Total Shows Performed: {{ venue['count'] }}</h4>
-					<!-- <p class="subtitle show_subtitle">Venue ID: {{ venue['id'] }}</p> -->
-	
-				  </div>
+<div class="row">
+	<div class='col-sm-6'>
+		<ul class="items">
+			{% for venue in venues['venues_info'] %}
+		{%if venue.city and venue.state %}
+				<h5> {{ venue.city }} , {{ venue.state }} </h5>
+			{%endif%}
+			<li>
+				<a href="/venues/{{ venue.id }}">
+					<i style = 'color: rgb(69, 141, 235)' class="fas fa-music"></i>
+					<div class="item">
+						<h4>{{ venue.name }}</h4>
+					</div>
+				</a>
+				<div class = 'floater'>
 				</div>
-			  {% endif %} 
-			{% endfor %}
+			{%if venue.image_link%}
+				<span class="venue_hover_img">
+					<img src= "{{ venue.image_link }}" alt="image">
+					<span class="toggle_audio" style="margin:0px;  position: absolute;
+					top: 50%;
+					left: 50%;
+					transform: translate(-50%, -50%);
+					-ms-transform: translate(-50%, -50%);
+					cursor: pointer;
+					border-radius: 5px;">
+					<input type="checkbox" onclick="play_pause('')">
+					<label data-off="Stop" data-on="Play"></label>
+				</span> </img>
+				</span>
+			{%endif%}
+
+			</li>
+		{% endfor %}
+		</ul>
+	</div>
+
+	<div class = 'col-sm-6' > 
+		<h2 class="venue_top"  id=''> Top Venues</h2>
+	
+		<div class="tab" style="width: 630px;">
+			<button class="tablinks tab_opened" onclick="openCity(event, 'tab_week')" id="defaultOpen">Week</button>
+			<button class="tablinks tab_closed" onclick="openCity(event, 'tab_all')">All Time</button>
 		  </div>
-	</div>
-
-	<div id="tab_all" class="tabcontent">
-		<div class="row" style="padding-top: 20px;">
-			<div class="col-sm-4" >
-			<div class="tile tile-show" >
-				lol
-			</div>
-			</div>
-			
+		  <!-- Tab content -->
+		<div id="tab_week" class="tabcontent" style="width: 630px;" >
+			<div class="row shows featured_row" style="max-width:auto; width: auto; height: auto;">
+				{%for venue in venues['week'] %} 
+				
+				  {%if loop.index <=4  %}
+					<div class="col-sm-4 " style="width: 50%;" >
+					  <div class="tile tile-show  " style="height: auto;" > 
+						<img style="box-shadow: 0 -1px 4px rgb(255, 255, 255), 0 -2px 10px #ff0, 0 -10px 20px #ff8000, 0 -18px 40px #F00;" src="{{ venue['image_link'] }}" alt="Venue Image" />
+						  <h5>
+							<a href="/venues/{{ venue['id'] }}">{{ venue['name'] }}</a>
+						  </h5>
+						  <h6 style='color:rgb(0, 0, 0);'>Total Shows Performed: {{ venue['count'] }}</h6>
+						<!-- <p class="subtitle show_subtitle">Venue ID: {{ venue['id'] }}</p> -->
+		
+					  </div>
+					</div>
+				  {% endif %} 
+				{% endfor %}
+			  </div>
 		</div>
+	
+		<div id="tab_all" class="tabcontent" style="width: 630px;" >
+			<div class="row shows featured_row" style="max-width:auto; width: auto; height: auto;">
+				{%for venue in venues['all'] %} 
+				
+				  {%if loop.index <=4  %}
+					<div class="col-sm-4 " style="width: 50%;" >
+					  <div class="tile tile-show  " style="height: auto;" > 
+						<img style="box-shadow: 0 -1px 4px rgb(255, 255, 255), 0 -2px 10px #ff0, 0 -10px 20px #ff8000, 0 -18px 40px #F00;" src="{{ venue['image_link'] }}" alt="Venue Image" />
+						  <h5>
+							<a href="/venues/{{ venue['id'] }}">{{ venue['name'] }}</a>
+						  </h5>
+						  <h6 style='color:rgb(0, 0, 0);'>Total Shows Performed: {{ venue['count'] }}</h6>
+						<!-- <p class="subtitle show_subtitle">Venue ID: {{ venue['id'] }}</p> -->
+		
+					  </div>
+					</div>
+				  {% endif %} 
+				{% endfor %}
+			  </div>
+		</div>
+	
+	
 	</div>
+	
 
-
+	
 </div>
 
-	<ul class="items">
-		{% for venue in venues['venues_info'] %}
-	{%if venue.city and venue.state %}
-			<h5> {{ venue.city }} , {{ venue.state }} </h5>
-		{%endif%}
-		<li>
-			<a href="/venues/{{ venue.id }}">
-				<i style = 'color: rgb(69, 141, 235)' class="fas fa-music"></i>
-				<div class="item">
-					<h4>{{ venue.name }}</h4>
-				</div>
-			</a>
-			<div class = 'floater'>
-			</div>
-		{%if venue.image_link%}
-			<span class="venue_hover_img">
-				<img src= "{{ venue.image_link }}" alt="image">
-				<span class="toggle_audio" style="margin:0px;  position: absolute;
-				top: 50%;
-				left: 50%;
-				transform: translate(-50%, -50%);
-				-ms-transform: translate(-50%, -50%);
-				cursor: pointer;
-				border-radius: 5px;">
-				<input type="checkbox" onclick="play_pause('')">
-				<label data-off="Stop" data-on="Play"></label>
-			</span> </img>
-			</span>
-		{%endif%}
-
-		</li>
-	{% endfor %}
-	</ul>
-
+	
 
 	<script>
 document.getElementById("defaultOpen").click();
