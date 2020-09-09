@@ -119,7 +119,7 @@ def create_app(test_config=None):
           "image_link": venue.image_link,
           "seeking_talent":venue.seeking_talent,
           "num_of_shows": venue.num_of_shows,
-          'count': current_show_count
+          "count": current_show_count
           }
         else:
           data= {
@@ -130,7 +130,7 @@ def create_app(test_config=None):
           "city": venue.city,
           "seeking_talent":venue.seeking_talent,
           "num_of_shows": venue.num_of_shows,
-          'count': current_show_count
+          "count": current_show_count
           }
           priorArea["state"]= venue.state
           priorArea["city"] = venue.city  
@@ -580,19 +580,35 @@ def create_app(test_config=None):
   @app.route('/artists')
   def artists():
     try:
-      returnData=[]
+      returnData={
+        'artist_info':[],
+        'all':[],
+        'week':[]
+                 
+        }
       priorArea = {"state":'',
                   "city": ''}
-          
+      
+
       allArtist= Artist.query.filter(Artist.deleted==False).order_by('state').order_by('city').all()
+      date_format = '%Y-%m-%d %H:%M:%S' 
+      date_allowance =((datetime.today() - timedelta(days=7)).strftime(date_format))
+      date_allowance_format = datetime.strptime(date_allowance,date_format)
+      
       for artist in allArtist:
+        current_show=""
+        current_show_count=0
+        if Show.query.filter(and_(Show.artist_id==artist.id , Show.deleted==False)).order_by(Show.created_time).all():
+          current_show = Show.query.filter(and_(Show.artist_id==artist.id , Show.deleted==False)).order_by(Show.created_time).all()
+          current_show_count= len(current_show) 
         if priorArea["state"] == artist.state and priorArea["city"] == artist.city:
           data= {
           "id": artist.id,
           "name": artist.name,
           "image_link": artist.image_link,
           "seeking_venue":artist.seeking_venue,
-          "num_of_shows": artist.num_of_shows
+          "num_of_shows": artist.num_of_shows,
+          "count": current_show_count
           }        
         else:
           data= {
@@ -602,14 +618,115 @@ def create_app(test_config=None):
           "state": artist.state,
           "city": artist.city,
           "seeking_venue":artist.seeking_venue,
-          "num_of_shows": artist.num_of_shows
+          "num_of_shows": artist.num_of_shows,
+          "count": current_show_count
+          
           }
           
           priorArea["state"]= artist.state
           priorArea["city"] = artist.city
-          print(f'{Fore.YELLOW} whaaa {priorArea} , {priorArea["state"]}, {priorArea["city"]}')
           
-        returnData.append(data)
+        returnData['artist_info'].append(data)
+        
+      if(len(returnData['artist_info']) >=0):
+        current_show=None
+        current_show_count=None
+        returnDataSortedWeek=None
+        returnDataSortedAll=None
+        
+        for i, artist in enumerate(returnData['artist_info']):
+          
+          if Show.query.filter(and_(Show.artist_id==artist['id'] , Show.deleted==False)).first():
+            # print('step 1')
+            current_show = Show.query.filter(and_(Show.artist_id==artist['id'] , Show.deleted==False)).order_by(Show.created_time).all()
+            current_show_count = len(current_show)
+            # print('current_show ', current_show, ' current_show_count ', current_show_count)  
+           
+          if current_show:
+            # print('step 2')
+            
+            if artist['count'] !=0:
+              # print('step 3 - returnData[week]: ', returnData['week'] ,'len: ', (len(returnData['week']) > 0), 'show time >= 7 days ago: ', current_show[0].created_time >= date_allowance_format, 'show time <= today time', current_show[0].created_time <= datetime.today())
+              
+              if len(returnData['week']) >5 and ((current_show[0].created_time >= date_allowance_format) and (current_show[0].created_time <= datetime.today())):
+                # print('step 4 ' , 'len(returnData[week]) <=6 and len(returnData[week]) >0: ', len(returnData['week']) <=6 and len(returnData['week']) >0)
+             
+                returnData['week']= sorted(returnData['week'], key=lambda i: i['count'], reverse=True)
+                
+                # print( i, ': \n\n')
+                # for x in returnData['week']:
+                #   print(' ', x, '\n')
+                  
+                # print(returnDataSorted)
+                for data in returnData['week']:
+                  # print('step 6 - data:' , data, ' artist[count] > data[count] ', artist['count'] > data['count'])
+                  
+                  if artist['count'] > data['count']:
+                    # print('before: returnData[week] ', returnData['week'])
+                    
+                    index=returnData['week'].index(data) 
+                    returnData['week'].pop(index)
+                    returnData['week'].append(artist)
+                    break
+                    # print('after: returnData[week] ', returnData['week'])
+                    
+                  elif (artist['count'] == data['count']):
+                    x = randint(1, 2)
+                    # print('@ 1b' , x)
+                    
+                    if x==1:
+                      # print('@ 1ba', returnData['week'].index(data))   
+                      index =returnData['week'].index(data)
+                      returnData['week'].pop(index)
+                      returnData['week'].append(artist)
+                      break
+                      # print('@ 1ba after: ' , returnData['week']) 
+                      
+              elif len(returnData['week']) < 6 and ((current_show[0].created_time >= date_allowance_format) and (current_show[0].created_time <= datetime.today())):
+                returnData['week'].append(artist)
+                # print('appended', artist)
+              else:
+                print('@bruh ' , (current_show[0].created_time >= date_allowance_format) and (current_show[0].created_time <= datetime.today()), current_show[0].created_time , date_allowance_format , datetime.today() )
+              
+              # print('i', i)
+              if len(returnData['all']) >5:
+                # print('step 4 ' , 'len(returnData[week]) <=6 and len(returnData[week]) >0: ', len(returnData['week']) <=6 and len(returnData['week']) >0)
+                
+                returnData['all']= sorted(returnData['all'], key=lambda i: i['count'], reverse=True)
+                # print( i, ': \n\n')
+                # for x in returnData['all']:
+                #   print(' ', x, '\n')
+                  
+                
+                for data in returnData['all']:
+                  # print('step 6 - data:' , data, ' artist[count] > data[count] ', artist['count'] > data['count'])
+                  
+                  if artist['count'] > data['count']:
+                    # print('before: returnData[week] ', returnData['week'])
+                    
+                    index=returnData['all'].index(data) 
+                    returnData['all'].pop(index)
+                    returnData['all'].append(artist)
+                    break
+                    # print('after: returnData[week] ', returnData['week'])
+                    
+                  elif (artist['count'] == data['count']):
+                    x = randint(1, 2)
+                    # print('@ 1b' , x)
+                    
+                    if x==1:
+                      # print('@ 1ba', returnData['week'].index(data))   
+                      index =returnData['all'].index(data)
+                      returnData['all'].pop(index)
+                      returnData['all'].append(artist)
+                      break
+                      # print('@ 1ba after: ' , returnData['week']) 
+              elif len(returnData['all']) < 6:
+                returnData['all'].append(artist)
+                # print('appended', artist)
+                
+        returnData['week']= sorted(returnData['week'], key=lambda i: i['count'], reverse=True)
+        returnData['all']= sorted(returnData['all'], key=lambda i: i['count'], reverse=True)
     except:
       print(f'{Fore.RED} Error: ', sys.exc_info())
     finally:
@@ -962,7 +1079,9 @@ def create_app(test_config=None):
                 "artist_deleted": shows[1].deleted,
                 "artist_image_link": shows[1].image_link,
                 "start_time": str(shows[0].start_time),
-                "featured_time": str(shows[0].feature_time)
+                "featured_time": str(shows[0].feature_time),
+                "show_id" : shows[0].id
+                
                 })
             
         if not (shows[0].deleted):
@@ -978,7 +1097,9 @@ def create_app(test_config=None):
               "artist_name": shows[1].name,
               "artist_deleted": shows[1].deleted,
               "artist_image_link": shows[1].image_link,
-              "start_time": str(shows[0].start_time)
+              "start_time": str(shows[0].start_time),
+              "show_id" : shows[0].id
+              
               })
             elif (shows[0].start_time > datetime.today()): 
               resultData['upcoming'].append({
@@ -989,7 +1110,9 @@ def create_app(test_config=None):
               "artist_name": shows[1].name,
               "artist_deleted": shows[1].deleted,
               "artist_image_link": shows[1].image_link,
-              "start_time": str(shows[0].start_time)
+              "start_time": str(shows[0].start_time),
+              "show_id" : shows[0].id
+              
               })
             else:
               error=True
@@ -1004,7 +1127,9 @@ def create_app(test_config=None):
                 "artist_name": shows[1].name,
                 "artist_deleted": shows[1].deleted,
                 "artist_image_link": shows[1].image_link,
-                "start_time": str(shows[0].start_time)
+                "start_time": str(shows[0].start_time),
+                "show_id" : shows[0].id
+                
                 })
             elif ((selected_genre.capitalize() in shows[2].genres or selected_genre.capitalize() in shows[1].genres)):
               #print('<#ehh', (selected_genre.capitalize() in shows[2].genres))
@@ -1018,7 +1143,9 @@ def create_app(test_config=None):
                 "artist_name": shows[1].name,
                 "artist_deleted": shows[1].deleted,
                 "artist_image_link": shows[1].image_link,
-                "start_time": str(shows[0].start_time)
+                "start_time": str(shows[0].start_time),
+                "show_id" : shows[0].id
+                
                 })
           elif (selected_pane == 'pane_header_past'):
             if (shows[0].start_time > datetime.today()):
@@ -1030,7 +1157,9 @@ def create_app(test_config=None):
                 "artist_name": shows[1].name,
                 "artist_deleted": shows[1].deleted,
                 "artist_image_link": shows[1].image_link,
-                "start_time": str(shows[0].start_time)
+                "start_time": str(shows[0].start_time),
+                "show_id" : shows[0].id
+                
                 }) 
             elif ((selected_genre.capitalize() in shows[2].genres or selected_genre.capitalize() in shows[1].genres)):
               #print('<#ehh', (selected_genre.capitalize() in shows[2].genres))
@@ -1044,7 +1173,9 @@ def create_app(test_config=None):
                 "artist_name": shows[1].name,
                 "artist_deleted": shows[1].deleted,
                 "artist_image_link": shows[1].image_link,
-                "start_time": str(shows[0].start_time)
+                "start_time": str(shows[0].start_time),
+                "show_id" : shows[0].id
+                
                 }) 
           else:
             search=False

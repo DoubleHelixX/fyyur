@@ -2,44 +2,120 @@
 {% block title %}Fyyur | Artists{% endblock %}
 {% block content %}
 
-<ul class="items">
-	{% for artist in artists %}
-		{%if artist.city and artist.state %}
-			<h5> {{ artist.city }} , {{ artist.state }} </h5>
-		{%endif%}
-	<li>
-		<a  href="/artists/{{ artist.id }}">
-			<i style = 'color: rgb(69, 141, 235)' class="fas fa-users"></i>
-			<div class="item">
-				<h4>  {{ artist.name }}</h4>
-			</div>
-		</a>
-		{%if artist.image_link%}
-		<span class="artist_hover_img">
-			<img src= "{{ artist.image_link }}" alt="image">
+<div class="row">
+	<div class='col-sm-6'>
+		<ul class="items">
+			{% for artist in artists['artist_info'] %}
+				{%if artist.city and artist.state %}
+					<h5> {{ artist.city }} , {{ artist.state }} </h5>
+				{%endif%}
+			<li>
+				<a  href="/artists/{{ artist.id }}">
+					<i style = 'color: rgb(69, 141, 235)' class="fas fa-users"></i>
+					<div class="item">
+						<h4>  {{ artist.name }}</h4>
+					</div>
+				</a>
+				{%if artist.image_link%}
+				<span class="artist_hover_img">
+					<img src= "{{ artist.image_link }}" alt="image">
 
-				<span class="toggle_audio" style="margin:0px;  position: absolute;
-				top: 50%;
-				left: 50%;
-				transform: translate(-50%, -50%);
-				-ms-transform: translate(-50%, -50%);
-				cursor: pointer;
-				border-radius: 5px;">
-				<input type="checkbox" onclick="play_pause('')">
-				<label data-off="Stop" data-on="Play"></label>
-			</span> 
-		</img>
-		</span>
-		{%endif%}
-	</li>
-	
-	{% endfor %}
-</ul>
+						<span class="toggle_audio" style="margin:0px;  position: absolute;
+						top: 50%;
+						left: 50%;
+						transform: translate(-50%, -50%);
+						-ms-transform: translate(-50%, -50%);
+						cursor: pointer;
+						border-radius: 5px;">
+						<input type="checkbox" onclick="play_pause('')">
+						<label data-off="Stop" data-on="Play"></label>
+					</span> 
+				</img>
+				</span>
+				{%endif%}
+			</li>
+			
+			{% endfor %}
+		</ul>
+	</div>
+
+
+	<div class = 'col-sm-6' > 
+		<h2 class="tab_top"  id=''> Top Artist</h2>
+
+		<div class="tab" style="width: 630px;">
+			<button class="tablinks tab_opened" onclick="openCity(event, 'tab_week')" id="defaultOpen">Week</button>
+			<button class="tablinks tab_closed" onclick="openCity(event, 'tab_all')">All Time</button>
+		</div>
+		<!-- Tab content -->
+		<div id="tab_week" class="tabcontent" style="width: 630px;" >
+			<div class="row shows featured_row" style="max-width:auto; width: auto; height: auto;">
+				{%for artist in artists['week'] %} 
+				
+				{%if loop.index <=4  %}
+					<div class="col-sm-4 " style="width: 50%;" >
+					<div class="tile tile-show  " style="height: auto;" > 
+						<img style="box-shadow: 0 -1px 4px rgb(255, 255, 255), 0 -2px 10px #ff0, 0 -10px 20px #ff8000, 0 -18px 40px #F00;" src="{{ artist['image_link'] }}" alt="artist Image" />
+						<h5>
+							<a href="/artist/{{ artist['id'] }}">{{ artist['name'] }}</a>
+						</h5>
+						<h6 style='color:rgb(0, 0, 0);'>Total Shows Performed: {{ artist['count'] }}</h6>
+						<!-- <p class="subtitle show_subtitle">artist ID: {{ artist['id'] }}</p> -->
+		
+					</div>
+					</div>
+				{% endif %} 
+				{% endfor %}
+			</div>
+		</div>
+
+		<div id="tab_all" class="tabcontent" style="width: 630px;" >
+			<div class="row shows featured_row" style="max-width:auto; width: auto; height: auto;">
+				{%for artist in artists['all'] %} 
+				
+				{%if loop.index <=4  %}
+				
+					<div class="col-sm-4 " style="width: 50%;" >
+					<div class="tile tile-show  " style="height: auto;" > 
+						<img style="box-shadow: 0 -1px 4px rgb(255, 255, 255), 0 -2px 10px #ff0, 0 -10px 20px #ff8000, 0 -18px 40px #F00;" src="{{ artist['image_link'] }}" alt="artist Image" />
+						<h5>
+							<a href="/artists/{{ artist['id'] }}">{{ artist['name'] }}</a>
+						</h5>
+						<h6 style='color:rgb(0, 0, 0);'>Total Shows Performed: {{ artist['count'] }}</h6>
+						<!-- <p class="subtitle show_subtitle">artist ID: {{ artist['id'] }}</p> -->
+		
+					</div>
+					</div>
+				{% endif %} 
+				{% endfor %}
+			</div>
+		</div>
+
+	</div>
+</div>
+
 
 <script>
-
-
-
-
-</script>
+	document.getElementById("defaultOpen").click();
+	function openCity(evt, tabName) {
+	  // Declare all variables
+	  var i, tabcontent, tablinks;
+	
+	  // Get all elements with class="tabcontent" and hide them
+	  tabcontent = document.getElementsByClassName("tabcontent");
+	  for (i = 0; i < tabcontent.length; i++) {
+		tabcontent[i].style.display = "none";
+	  }
+	
+	  // Get all elements with class="tablinks" and remove the class "active"
+	  tablinks = document.getElementsByClassName("tablinks");
+	  for (i = 0; i < tablinks.length; i++) {
+		tablinks[i].className = tablinks[i].className.replace(" active", "");
+	  }
+	
+	  // Show the current tab, and add an "active" class to the button that opened the tab
+	  document.getElementById(tabName).style.display = "block";
+	  evt.currentTarget.className += " active";
+	}
+		</script>
 {% endblock %}
