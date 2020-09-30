@@ -1,18 +1,18 @@
 import os
 from sqlalchemy import (
-  Column,
-  String,
-  Integer,
-  create_engine,
-  select,
-  func,
-  DateTime
+    Column,
+    String,
+    Integer,
+    create_engine,
+    select,
+    func,
+    DateTime
 )
 from datetime import datetime
 from constants import (
-  database_setup,
-  jsonData,
-  SECRET_KEY
+    database_setup,
+    jsonData,
+    SECRET_KEY
 )
 import dateutil.parser
 import babel
@@ -22,7 +22,7 @@ import json
 from flask import Flask
 import pandas as pd
 from flask_moment import Moment
-#from manage import migration
+# from manage import migration
 
 # ------------------------------------------------------------------------------------------------------#
 # *                        Configures DB connection
@@ -49,18 +49,17 @@ def setup_db(app, database_path=database_path):
     db.app = app
     db.init_app(app)
     db.create_all()
-    
+
     # *-------------------------Configure Moment--------------------------#
     # *                       Formats Dates & Time
     # *-------------------------------------------------------------------#
     moment = Moment(app)
-    
+
     #  ?----------------------------------------------------------------------------#
     #  ?                               OPTIONAL
     #  ?                      Localize Migration setup
     #  ?----------------------------------------------------------------------------#
     # migration(app,db)
-
 
 
 # ------------------------------------------------------------------------------------------------------#
@@ -112,28 +111,67 @@ def db_initialize_tables_json():
 # *                            Models - ORM
 # *----------------------------------------------------------------------------#
 class Venue(db.Model):
-      __tablename__ = 'venue'
+    __tablename__ = 'venue'
 
-      id = db.Column(db.Integer, primary_key=True)
-      name = db.Column(db.String)
-      city = db.Column(db.String(120))
-      state = db.Column(db.String(120))
-      address = db.Column(db.String(120))
-      phone = db.Column(db.String(120))
-      genres = db.Column(db.ARRAY(db.String(120))) 
-      website_link = db.Column(db.String(120))
-      image_link = db.Column(db.String(500))
-      facebook_link = db.Column(db.String(120))
-      seeking_talent = db.Column(db.Boolean, default = False)
-      seeking_description = db.Column(db.String(250))
-      num_of_shows = db.Column(db.Integer, default = 0)
-      shows = db.relationship('Show', backref='venue', lazy=True)
-      deleted = db.Column(db.Boolean, default = False)
-      
-      def __repr__(self):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    city = db.Column(db.String(120))
+    state = db.Column(db.String(120))
+    address = db.Column(db.String(120))
+    phone = db.Column(db.String(120))
+    genres = db.Column(db.ARRAY(db.String(120)))
+    website_link = db.Column(db.String(120))
+    image_link = db.Column(db.String(500))
+    facebook_link = db.Column(db.String(120))
+    seeking_talent = db.Column(db.Boolean, default=False)
+    seeking_description = db.Column(db.String(250))
+    num_of_shows = db.Column(db.Integer, default=0)
+    shows = db.relationship('Show', backref='venue', lazy=True)
+    deleted = db.Column(db.Boolean, default=False)
+
+    def __repr__(self):
         return f'<Venue {self.id} {self.name}>'
-      
-      
+
+    # def __init__(self,
+    #             bay, section, name,
+    #             style, row, col,
+    #             notes, img, gender):
+    #     self.bay = bay
+    #     self.section = section
+    #     self.name = name
+    #     self.style = style
+    #     self.row = row
+    #     self.col = col
+    #     self.notes = notes
+    #     self.img = img
+    #     self.gender = gender
+
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    # def format(self):
+    #     return {
+    #         'id': self.id,
+    #         'bay': self.bay,
+    #         'section': self.section,
+    #         'name': self.name,
+    #         'style': self.style,
+    #         'row': self.row,
+    #         'col': self.col,
+    #         'notes': self.notes,
+    #         'img': self.img,
+    #         'gender': self.gender.upper()
+    #     }
+
+
 class Artist(db.Model):
     __tablename__ = 'artist'
 
@@ -146,34 +184,116 @@ class Artist(db.Model):
     image_link = db.Column(db.String(500))
     website_link = db.Column(db.String(120))
     facebook_link = db.Column(db.String(120))
-    seeking_venue = db.Column(db.Boolean, default = False)
+    seeking_venue = db.Column(db.Boolean, default=False)
     seeking_description = db.Column(db.String(250))
-    num_of_shows = db.Column(db.Integer, default = 0)
+    num_of_shows = db.Column(db.Integer, default=0)
     shows = db.relationship('Show', backref='artist', lazy=True)
-    deleted = db.Column(db.Boolean, default = False)
-    
+    deleted = db.Column(db.Boolean, default=False)
+
     def __repr__(self):
         return f'<Artist {self.id} {self.name}>'
 
+    # def __init__(self,
+    #             bay, section, name,
+    #             style, row, col,
+    #             notes, img, gender):
+    #     self.bay = bay
+    #     self.section = section
+    #     self.name = name
+    #     self.style = style
+    #     self.row = row
+    #     self.col = col
+    #     self.notes = notes
+    #     self.img = img
+    #     self.gender = gender
+
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    # def format(self):
+    #     return {
+    #         'id': self.id,
+    #         'bay': self.bay,
+    #         'section': self.section,
+    #         'name': self.name,
+    #         'style': self.style,
+    #         'row': self.row,
+    #         'col': self.col,
+    #         'notes': self.notes,
+    #         'img': self.img,
+    #         'gender': self.gender.upper()
+    #     }
 
 
-# DONE Implement Show and Artist models, and complete all model relationships and properties, as a database migration.
 class Show(db.Model):
     __tablename__ = 'shows'
     id = db.Column(db.Integer, primary_key=True)
-    artist_id = db.Column(db.Integer, db.ForeignKey('artist.id'), nullable=False)
+    artist_id = db.Column(db.Integer, db.ForeignKey(
+        'artist.id'), nullable=False)
     venue_id = db.Column(db.Integer, db.ForeignKey('venue.id'), nullable=False)
     start_time = db.Column(db.DateTime, nullable=False)
-    deleted = db.Column(db.Boolean, default = False)
+    deleted = db.Column(db.Boolean, default=False)
     feature_time = db.Column(db.DateTime, nullable=True)
-    created_time = db.Column(db.DateTime, nullable=True, default=datetime.today())
-    
+    created_time = db.Column(db.DateTime, nullable=True,
+                             default=datetime.today())
+
+    def __repr__(self):
+        return f'<Show {self.id}>'
+
+    # def __init__(self,
+    #             bay, section, name,
+    #             style, row, col,
+    #             notes, img, gender):
+    #     self.bay = bay
+    #     self.section = section
+    #     self.name = name
+    #     self.style = style
+    #     self.row = row
+    #     self.col = col
+    #     self.notes = notes
+    #     self.img = img
+    #     self.gender = gender
+
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    # def format(self):
+    #     return {
+    #         'id': self.id,
+    #         'bay': self.bay,
+    #         'section': self.section,
+    #         'name': self.name,
+    #         'style': self.style,
+    #         'row': self.row,
+    #         'col': self.col,
+    #         'notes': self.notes,
+    #         'img': self.img,
+    #         'gender': self.gender.upper()
+    #     }
 
 # *----------------------------------------------------------------------------#
 # *                             Filters.
 # *----------------------------------------------------------------------------#
 
 # * Moment Format Function
+
+
 def format_datetime(value, format='medium'):
     date = dateutil.parser.parse(value)
     if format == 'full':
@@ -186,14 +306,13 @@ def format_datetime(value, format='medium'):
 # ! Optional reset PK int values
 # def manageSequence(tableName,className):
 #     #? ***REVISION LATER*** :  COUNT() Takes too long in large databases
-#     #* maxCount = select([func.count()]).select_from(Todo)
+#     #* maxCount=select([func.count()]).select_from(Todo)
 #     maxCount = db.session.query(className).all().count(className.id)
 #     #* Reset the auto PK increment sequence to current max
 #     alterSeq= "ALTER SEQUENCE " + tableName +"_id_seq RESTART WITH " + str(maxCount) #substitute for 1 if starting off empty with todos
 #     db.session.execute(alterSeq)
 #     db.session.commit()
-#     db.session.close()  
-    
+#     db.session.close()
+
 # *Reset chosen table
-#manageSequence("venue",Venue)
- 
+# manageSequence("venue",Venue)

@@ -1,23 +1,34 @@
 from datetime import datetime
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField,BooleanField, IntegerField, validators,  SubmitField, DecimalField,RadioField
+from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField, BooleanField, IntegerField, validators,  SubmitField, DecimalField, RadioField
 from wtforms.validators import DataRequired, AnyOf, URL, NumberRange
 
 #  *----------------------------------------------------------------------------#
 #  *                      WTForms implementation
 #  *----------------------------------------------------------------------------#
+
+#  ?----------------------------------------------------------------------------#
+#  ?                            [ShowForm]
+#  ?----------------------------------------------------------------------------#
+
+
 class ShowForm(FlaskForm):
     artist_id = IntegerField(
         'artist_id', validators=[DataRequired()]
-        )
+    )
     venue_id = IntegerField(
         'venue_id', validators=[DataRequired()]
-        )
+    )
     start_time = DateTimeField(
         'start_time',
         validators=[DataRequired()],
-        default= datetime.today()
+        default=datetime.today()
     )
+
+#  ?----------------------------------------------------------------------------#
+#  ?                            [VenueForm]
+#  ?----------------------------------------------------------------------------#
+
 
 class VenueForm(FlaskForm):
     name = StringField(
@@ -85,7 +96,7 @@ class VenueForm(FlaskForm):
     address = StringField(
         'address', validators=[DataRequired()]
     )
-    phone =  StringField(
+    phone = StringField(
         'phone', validators=[NumberRange(min=0, max=12, message='Field only accepts length of 12 ')]
     )
     image_link = StringField(
@@ -117,10 +128,10 @@ class VenueForm(FlaskForm):
         ]
     )
     website_link = StringField(
-        'website_link', validators=[URL()], default =''
+        'website_link', validators=[URL()], default=''
     )
     facebook_link = StringField(
-        'facebook_link', validators=[URL()], default =''
+        'facebook_link', validators=[URL()], default=''
     )
     seeking_talent = BooleanField(
         'seeking_talent', default=False
@@ -128,6 +139,10 @@ class VenueForm(FlaskForm):
     seeking_description = StringField(
         'seeking_description', default=''
     )
+#  ?----------------------------------------------------------------------------#
+#  ?                            [ArtistForm]
+#  ?----------------------------------------------------------------------------#
+
 
 class ArtistForm(FlaskForm):
     name = StringField(
@@ -192,7 +207,7 @@ class ArtistForm(FlaskForm):
             ('WY', 'WY'),
         ]
     )
-    phone =  StringField(
+    phone = StringField(
         'phone', validators=[NumberRange(min=0, max=12, message='Field only accepts length of 12 ')]
     )
     image_link = StringField(
@@ -224,19 +239,22 @@ class ArtistForm(FlaskForm):
         ]
     )
     facebook_link = StringField(
-        'facebook_link', validators=[URL()], default =''
+        'facebook_link', validators=[URL()], default=''
     )
     website_link = StringField(
-        'website_link', validators=[URL()], default =''
+        'website_link', validators=[URL()], default=''
     )
     seeking_venue = BooleanField(
         'seeking_venue', default=False
     )
     seeking_description = StringField(
-        'seeking_description', default='' #gave default values if left empty
+        'seeking_description', default=''  # gave default values if left empty
     )
 
+#  ?----------------------------------------------------------------------------#
+#  ?                            [GetFeaturedForm]
+#  ?----------------------------------------------------------------------------#
+
+
 class GetFeaturedForm(FlaskForm):
-     show_id = StringField(
-        'show_id', validators=[DataRequired()]
-    )
+    show_id = StringField('show_id', validators=[DataRequired()])
