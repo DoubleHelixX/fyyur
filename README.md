@@ -27,13 +27,13 @@ Our tech stack will include:
 
   ```sh
   ├── README.md
-  ├── app.py **the main driver of the app. Includes your SQLAlchemy models. "python app.py" to run after installing dependences**
-  ├── constants.py **Database URLs, CSRF generation, etc**
+  ├── app.py ** the main driver of the app. Includes your SQLAlchemy models. "python app.py" to run after installing dependences **
+  ├── constants.py ** Database URLs, CSRF generation, etc **
   ├── error.log
-  ├── forms.py ** Your forms**
-  ├── models.py **Includes your SQLAlchemy models**
-  ├── manage.py **database configuration and setup**
-  ├── requirements.txt **The dependencies we need to install with "pip3 install -r requirements.txt"**
+  ├── forms.py ** Your forms **
+  ├── models.py ** Includes your SQLAlchemy models **
+  ├── manage.py ** database configuration and setup **
+  ├── requirements.txt ** The dependencies we need to install with "pip3 install -r requirements.txt" **
   ├── static
   │   ├── css 
   │   ├── font
