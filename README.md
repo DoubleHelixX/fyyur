@@ -49,7 +49,7 @@ Our tech stack will include:
 ```
 ### What functionality does Fyyur provide?
 
- **` Please Note - Pictures below are outdated and will get updated soon. More functionality and changes to styles have been added. Check out the app itself to see.`**
+**` Please Note - Pictures below are outdated and will get updated soon. More functionality and changes to styles have been added. Check out the app itself to see.`**
  
 **Using Fyyur will give you the ability to search,create,delete,edit,view artist, venues, and or shows!**
 - Artist
