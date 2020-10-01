@@ -47,7 +47,7 @@ Our tech stack will include:
       ├── layouts
       └── pages
 ```
-### What solutions does Fyyur provide?
+### What functionality does Fyyur provide?
 
 **Using Fyyur will give you the ability to search,create,delete,edit,view artist, venues, and or shows!**
 - Artist
